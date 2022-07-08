@@ -11,6 +11,7 @@ export function transform(xml: string) {
 
   const parser = new XMLParser(options);
   const xmlJs = parser.parse(xml);
+  console.log(xmlJs);
 
   // 替换成平台的属性
   map(xmlJs);
@@ -22,12 +23,25 @@ export function transform(xml: string) {
     format: true,
     indentBy: "  ",
     attributeNamePrefix: "@_",
-  });
+    entities: [],
+  } as any);
 
   return builder.build(xmlJs);
 }
 
+function isPlainObject(val: any): val is Record<string, any> {
+  if (
+    val === null ||
+    Object.prototype.toString.call(val) !== "[object Object]"
+  ) {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(val);
+  return prototype === null || prototype === Object.prototype;
+}
+
 function map(jsonObj: Record<string, any>) {
+  console.log(jsonObj);
   Object.keys(jsonObj || {})
     .filter((key) => key.startsWith("@_"))
     .forEach((key) => {
@@ -50,7 +64,17 @@ function map(jsonObj: Record<string, any>) {
   Object.keys(jsonObj || {})
     .filter((key) => !key.startsWith("@_"))
     .forEach((key) => {
-      map(jsonObj[key]);
+      if (isPlainObject(jsonObj[key])) {
+        map(jsonObj[key]);
+      }
+      if (Array.isArray(jsonObj[key])) {
+        jsonObj[key].forEach((item: any) => {
+          if (isPlainObject(item)) {
+            map(item);
+          }
+        });
+        return;
+      }
     });
 }
 
