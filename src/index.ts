@@ -11,7 +11,6 @@ export function transform(xml: string) {
 
   const parser = new XMLParser(options);
   const xmlJs = parser.parse(xml);
-  console.log(xmlJs);
 
   // 替换成平台的属性
   map(xmlJs);
@@ -41,7 +40,6 @@ function isPlainObject(val: any): val is Record<string, any> {
 }
 
 function map(jsonObj: Record<string, any>) {
-  console.log(jsonObj);
   Object.keys(jsonObj || {})
     .filter((key) => key.startsWith("@_"))
     .forEach((key) => {
