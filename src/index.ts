@@ -63,8 +63,9 @@ function map(jsonObj: Record<string, any>) {
     .filter((key) => !key.startsWith("@_"))
     .forEach((key) => {
       const keyName = process.env.isLowerCaseTag ? key.toLowerCase() : key;
-      jsonObj[keyName] = jsonObj[key];
+      const value = jsonObj[key];
       delete jsonObj[key];
+      jsonObj[keyName] = value;
 
       if (isPlainObject(jsonObj[keyName])) {
         map(jsonObj[keyName]);

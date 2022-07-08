@@ -1920,8 +1920,9 @@ function map(jsonObj) {
         .filter(function (key) { return !key.startsWith("@_"); })
         .forEach(function (key) {
         var keyName = process.env.isLowerCaseTag ? key.toLowerCase() : key;
-        jsonObj[keyName] = jsonObj[key];
+        var value = jsonObj[key];
         delete jsonObj[key];
+        jsonObj[keyName] = value;
         if (isPlainObject(jsonObj[keyName])) {
             map(jsonObj[keyName]);
         }
