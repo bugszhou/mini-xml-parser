@@ -3,10 +3,14 @@
 import * as minimist from "minimist";
 import parser from "../dist/index";
 
-const argv = minimist(process.argv.slice(2)),
-  pathUrl = argv._[0] || ".";
-
 console.log("转换中...");
+
+const argv = minimist(process.argv.slice(2)),
+  pathUrl = argv._[0] || ".",
+  isLowerCase = argv.lower;
+
+process.env.isLowerCaseTag = isLowerCase;
+
 try {
   parser(pathUrl, argv.dest);
   console.log("转换成功");

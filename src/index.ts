@@ -22,8 +22,8 @@ export function transform(xml: string) {
     format: true,
     indentBy: "  ",
     attributeNamePrefix: "@_",
-    entities: [],
-  } as any);
+    processEntities: false,
+  });
 
   return builder.build(xmlJs);
 }
@@ -62,11 +62,15 @@ function map(jsonObj: Record<string, any>) {
   Object.keys(jsonObj || {})
     .filter((key) => !key.startsWith("@_"))
     .forEach((key) => {
-      if (isPlainObject(jsonObj[key])) {
-        map(jsonObj[key]);
+      const keyName = process.env.isLowerCaseTag ? key.toLowerCase() : key;
+      jsonObj[keyName] = jsonObj[key];
+      delete jsonObj[key];
+
+      if (isPlainObject(jsonObj[keyName])) {
+        map(jsonObj[keyName]);
       }
-      if (Array.isArray(jsonObj[key])) {
-        jsonObj[key].forEach((item: any) => {
+      if (Array.isArray(jsonObj[keyName])) {
+        jsonObj[keyName].forEach((item: any) => {
           if (isPlainObject(item)) {
             map(item);
           }

@@ -1879,7 +1879,6 @@ function transform(xml) {
     };
     var parser = new fxp.XMLParser(options);
     var xmlJs = parser.parse(xml);
-    console.log(xmlJs);
     // 替换成平台的属性
     map(xmlJs);
     var builder = new fxp.XMLBuilder({
@@ -1889,7 +1888,7 @@ function transform(xml) {
         format: true,
         indentBy: "  ",
         attributeNamePrefix: "@_",
-        entities: [],
+        processEntities: false,
     });
     return builder.build(xmlJs);
 }
@@ -1902,7 +1901,6 @@ function isPlainObject(val) {
     return prototype === null || prototype === Object.prototype;
 }
 function map(jsonObj) {
-    console.log(jsonObj);
     Object.keys(jsonObj || {})
         .filter(function (key) { return key.startsWith("@_"); })
         .forEach(function (key) {
@@ -1921,11 +1919,14 @@ function map(jsonObj) {
     Object.keys(jsonObj || {})
         .filter(function (key) { return !key.startsWith("@_"); })
         .forEach(function (key) {
-        if (isPlainObject(jsonObj[key])) {
-            map(jsonObj[key]);
+        var keyName = process.env.isLowerCaseTag ? key.toLowerCase() : key;
+        jsonObj[keyName] = jsonObj[key];
+        delete jsonObj[key];
+        if (isPlainObject(jsonObj[keyName])) {
+            map(jsonObj[keyName]);
         }
-        if (Array.isArray(jsonObj[key])) {
-            jsonObj[key].forEach(function (item) {
+        if (Array.isArray(jsonObj[keyName])) {
+            jsonObj[keyName].forEach(function (item) {
                 if (isPlainObject(item)) {
                     map(item);
                 }
