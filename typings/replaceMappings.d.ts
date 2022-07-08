@@ -1,0 +1,22 @@
+declare const _default: {
+    "wx:if": string;
+    "wx:elif": string;
+    "wx:else": string;
+    "wx:for": string;
+    "wx:for-index": string;
+    "wx:for-item": string;
+    "wx:key": string;
+    "bind:tap": string;
+    "catch:tap": string;
+    "bind:longtap": string;
+    "catch:longtap": string;
+    "bind:touchstart": string;
+    "catch:touchstart": string;
+    "bind:touchmove": string;
+    "catch:touchmove": string;
+    "bind:touchend": string;
+    "catch:touchend": string;
+    "bind:touchcancel": string;
+    "catch:touchcancel": string;
+};
+export default _default;
