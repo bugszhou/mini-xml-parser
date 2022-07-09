@@ -7,9 +7,11 @@ console.log("转换中...");
 
 const argv = minimist(process.argv.slice(2)),
   pathUrl = argv._[0] || ".",
-  isLowerCase = argv.lower;
+  isLowerCase = argv.lower,
+  useRootPath = argv.root;
 
 process.env.isLowerCaseTag = isLowerCase;
+process.env.useRootPath = useRootPath;
 
 try {
   parser(pathUrl, argv.dest);

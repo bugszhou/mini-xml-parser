@@ -1,7 +1,9 @@
 import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { join, relative, resolve } from "path";
 import replaceMappings from "./replaceMappings";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
+
+let sourcePath = "";
 
 export function transform(xml: string) {
   const options = {
@@ -68,10 +70,23 @@ function map(jsonObj: Record<string, any>) {
       jsonObj[keyName] = value;
 
       if (isPlainObject(jsonObj[keyName])) {
+        if (keyName === "image") {
+          jsonObj[keyName]["@_src"] = relative(
+            join(process.cwd(), "src"),
+            resolve(sourcePath, jsonObj[keyName]["@_src"]),
+          );
+        }
         map(jsonObj[keyName]);
       }
       if (Array.isArray(jsonObj[keyName])) {
         jsonObj[keyName].forEach((item: any) => {
+          if (keyName === "image") {
+            item["@_src"] = relative(
+              join(process.cwd(), "src"),
+              resolve(sourcePath, item["@_src"]),
+            );
+          }
+
           if (isPlainObject(item)) {
             map(item);
           }
@@ -82,7 +97,9 @@ function map(jsonObj: Record<string, any>) {
 }
 
 export default function parse(source: string, dest: string) {
-  const xml = readFileSync(join(process.cwd(), source), "utf-8");
+  sourcePath = join(process.cwd(), source);
+  const xml = readFileSync(sourcePath, "utf-8");
   const builderXml = transform(xml);
   writeFileSync(dest, builderXml);
+  sourcePath = "";
 }

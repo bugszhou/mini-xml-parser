@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { join, relative, resolve } from 'path';
 
 var replaceMappings = {
     "wx:if": "a:if",
@@ -1872,6 +1872,7 @@ var fxp = {
   XMLBuilder: json2xml
 };
 
+var sourcePath = "";
 function transform(xml) {
     var options = {
         ignoreAttributes: false,
@@ -1924,10 +1925,16 @@ function map(jsonObj) {
         delete jsonObj[key];
         jsonObj[keyName] = value;
         if (isPlainObject(jsonObj[keyName])) {
+            if (keyName === "image") {
+                jsonObj[keyName]["@_src"] = relative(join(process.cwd(), "src"), resolve(sourcePath, jsonObj[keyName]["@_src"]));
+            }
             map(jsonObj[keyName]);
         }
         if (Array.isArray(jsonObj[keyName])) {
             jsonObj[keyName].forEach(function (item) {
+                if (keyName === "image") {
+                    item["@_src"] = relative(join(process.cwd(), "src"), resolve(sourcePath, item["@_src"]));
+                }
                 if (isPlainObject(item)) {
                     map(item);
                 }
@@ -1937,9 +1944,11 @@ function map(jsonObj) {
     });
 }
 function parse(source, dest) {
-    var xml = readFileSync(join(process.cwd(), source), "utf-8");
+    sourcePath = join(process.cwd(), source);
+    var xml = readFileSync(sourcePath, "utf-8");
     var builderXml = transform(xml);
     writeFileSync(dest, builderXml);
+    sourcePath = "";
 }
 
 export { parse as default, transform };

@@ -8,6 +8,7 @@ var fs_1 = require("fs");
 var path_1 = require("path");
 var replaceMappings_1 = __importDefault(require("./replaceMappings"));
 var fast_xml_parser_1 = require("fast-xml-parser");
+var sourcePath = "";
 function transform(xml) {
     var options = {
         ignoreAttributes: false,
@@ -61,10 +62,16 @@ function map(jsonObj) {
         delete jsonObj[key];
         jsonObj[keyName] = value;
         if (isPlainObject(jsonObj[keyName])) {
+            if (keyName === "image") {
+                jsonObj[keyName]["@_src"] = (0, path_1.relative)((0, path_1.join)(process.cwd(), "src"), (0, path_1.resolve)(sourcePath, jsonObj[keyName]["@_src"]));
+            }
             map(jsonObj[keyName]);
         }
         if (Array.isArray(jsonObj[keyName])) {
             jsonObj[keyName].forEach(function (item) {
+                if (keyName === "image") {
+                    item["@_src"] = (0, path_1.relative)((0, path_1.join)(process.cwd(), "src"), (0, path_1.resolve)(sourcePath, item["@_src"]));
+                }
                 if (isPlainObject(item)) {
                     map(item);
                 }
@@ -74,9 +81,11 @@ function map(jsonObj) {
     });
 }
 function parse(source, dest) {
-    var xml = (0, fs_1.readFileSync)((0, path_1.join)(process.cwd(), source), "utf-8");
+    sourcePath = (0, path_1.join)(process.cwd(), source);
+    var xml = (0, fs_1.readFileSync)(sourcePath, "utf-8");
     var builderXml = transform(xml);
     (0, fs_1.writeFileSync)(dest, builderXml);
+    sourcePath = "";
 }
 exports.default = parse;
 //# sourceMappingURL=index.js.map
