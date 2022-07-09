@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { join, relative, resolve } from 'path';
+import { join, relative, resolve, dirname } from 'path';
 
 var replaceMappings = {
     "wx:if": "a:if",
@@ -1932,8 +1932,8 @@ function map(jsonObj) {
         }
         if (Array.isArray(jsonObj[keyName])) {
             jsonObj[keyName].forEach(function (item) {
-                if (keyName === "image") {
-                    item["@_src"] = relative(join(process.cwd(), "src"), resolve(sourcePath, item["@_src"]));
+                if (keyName === "image" && process.env.useRootPath) {
+                    item["@_src"] = "/" + relative(join(process.cwd(), "src"), resolve(dirname(sourcePath), item["@_src"]));
                 }
                 if (isPlainObject(item)) {
                     map(item);

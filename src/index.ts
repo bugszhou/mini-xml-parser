@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { join, relative, resolve } from "path";
+import { dirname, join, relative, resolve } from "path";
 import replaceMappings from "./replaceMappings";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 
@@ -80,10 +80,10 @@ function map(jsonObj: Record<string, any>) {
       }
       if (Array.isArray(jsonObj[keyName])) {
         jsonObj[keyName].forEach((item: any) => {
-          if (keyName === "image") {
-            item["@_src"] = relative(
+          if (keyName === "image" && process.env.useRootPath) {
+            item["@_src"] = "/" + relative(
               join(process.cwd(), "src"),
-              resolve(sourcePath, item["@_src"]),
+              resolve(dirname(sourcePath), item["@_src"]),
             );
           }
 

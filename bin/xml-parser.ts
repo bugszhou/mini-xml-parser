@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as minimist from "minimist";
-import parser from "../dist/index";
+import parser from "../dist/mini-xml-parser.min";
 
 console.log("转换中...");
 

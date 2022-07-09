@@ -69,8 +69,8 @@ function map(jsonObj) {
         }
         if (Array.isArray(jsonObj[keyName])) {
             jsonObj[keyName].forEach(function (item) {
-                if (keyName === "image") {
-                    item["@_src"] = (0, path_1.relative)((0, path_1.join)(process.cwd(), "src"), (0, path_1.resolve)(sourcePath, item["@_src"]));
+                if (keyName === "image" && process.env.useRootPath) {
+                    item["@_src"] = "/" + (0, path_1.relative)((0, path_1.join)(process.cwd(), "src"), (0, path_1.resolve)((0, path_1.dirname)(sourcePath), item["@_src"]));
                 }
                 if (isPlainObject(item)) {
                     map(item);
