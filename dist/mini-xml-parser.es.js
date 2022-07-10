@@ -1926,7 +1926,7 @@ function map(jsonObj) {
         jsonObj[keyName] = value;
         if (isPlainObject(jsonObj[keyName])) {
             if (keyName === "image") {
-                jsonObj[keyName]["@_src"] = relative(join(process.cwd(), "src"), resolve(sourcePath, jsonObj[keyName]["@_src"]));
+                jsonObj[keyName]["@_src"] = "/" + relative(join(process.cwd(), "src"), resolve(dirname(sourcePath), jsonObj[keyName]["@_src"]));
             }
             map(jsonObj[keyName]);
         }
