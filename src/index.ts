@@ -1,99 +1,65 @@
 import { readFileSync, writeFileSync } from "fs";
 import { dirname, join, relative, resolve } from "path";
 import replaceMappings from "./replaceMappings";
-import { XMLParser, XMLBuilder } from "fast-xml-parser";
+import { parseFragment, serialize } from "mini-program-xml-parser";
+import {
+  DocumentFragment,
+  Element,
+} from "mini-program-xml-parser/dist/tree-adapters/default";
 
 let sourcePath = "";
 
 export function transform(xml: string) {
-  const options = {
-    ignoreAttributes: false,
-    allowBooleanAttributes: true,
-  };
-
-  const parser = new XMLParser(options);
-  const xmlJs = parser.parse(xml);
+  const document = parseFragment(xml);
 
   // 替换成平台的属性
-  map(xmlJs);
+  map(document.childNodes);
 
-  const builder = new XMLBuilder({
-    ignoreAttributes: false,
-    suppressBooleanAttributes: true,
-    suppressEmptyNode: true,
-    format: true,
-    indentBy: "  ",
-    attributeNamePrefix: "@_",
-    processEntities: false,
-  });
-
-  return builder.build(xmlJs);
+  return serialize(document);
 }
 
-function isPlainObject(val: any): val is Record<string, any> {
-  if (
-    val === null ||
-    Object.prototype.toString.call(val) !== "[object Object]"
-  ) {
-    return false;
-  }
-  const prototype = Object.getPrototypeOf(val);
-  return prototype === null || prototype === Object.prototype;
-}
+function map(childNodes: DocumentFragment["childNodes"]) {
+  childNodes?.forEach((item) => {
+    const element = item as unknown as Element;
 
-function map(jsonObj: Record<string, any>) {
-  Object.keys(jsonObj || {})
-    .filter((key) => key.startsWith("@_"))
-    .forEach((key) => {
-      const name = key.replace(/^\@_/, "") as keyof typeof replaceMappings;
-      let keyName: string = name;
-      if (
-        !replaceMappings[name] &&
-        (name?.startsWith("bind:") || name?.startsWith("catch:"))
-      ) {
-        keyName = keyName.replace(/^(bind:)|^(catch:)/, "");
-      }
+    if (element?.attrs) {
+      element.attrs.forEach((attr) => {
+        const name = (
+          process.env.isLowerCaseTag ? attr.name.toLowerCase : attr.name
+        ) as keyof typeof replaceMappings;
 
-      keyName =
-        replaceMappings[keyName as keyof typeof replaceMappings] || keyName;
-      const value = jsonObj[key];
-      delete jsonObj[key];
-      jsonObj[`@_${keyName}`] = value;
-    });
+        let keyName: string = name;
 
-  Object.keys(jsonObj || {})
-    .filter((key) => !key.startsWith("@_"))
-    .forEach((key) => {
-      const keyName = process.env.isLowerCaseTag ? key.toLowerCase() : key;
-      const value = jsonObj[key];
-      delete jsonObj[key];
-      jsonObj[keyName] = value;
-
-      if (isPlainObject(jsonObj[keyName])) {
-        if (keyName === "image") {
-          jsonObj[keyName]["@_src"] = "/" + relative(
-            join(process.cwd(), "src"),
-            resolve(dirname(sourcePath), jsonObj[keyName]["@_src"]),
-          );
+        if (
+          !replaceMappings[name] &&
+          (name?.startsWith("bind:") || name?.startsWith("catch:"))
+        ) {
+          keyName = keyName.replace(/^(bind:)|^(catch:)/, "");
         }
-        map(jsonObj[keyName]);
-      }
-      if (Array.isArray(jsonObj[keyName])) {
-        jsonObj[keyName].forEach((item: any) => {
-          if (keyName === "image" && process.env.useRootPath) {
-            item["@_src"] = "/" + relative(
-              join(process.cwd(), "src"),
-              resolve(dirname(sourcePath), item["@_src"]),
-            );
-          }
 
-          if (isPlainObject(item)) {
-            map(item);
-          }
-        });
-        return;
-      }
-    });
+        keyName =
+          replaceMappings[keyName as keyof typeof replaceMappings] || keyName;
+
+        attr.name = keyName;
+
+        if (
+          element.nodeName === "image" &&
+          attr.name === "src" &&
+          !attr.value?.startsWith("{{") &&
+          process.env.useRootPath
+        ) {
+          attr.value =
+            "/" +
+            relative(
+              join(process.cwd(), "src"),
+              resolve(dirname(sourcePath), attr.value),
+            );
+        }
+      });
+    }
+
+    map(element.childNodes);
+  });
 }
 
 export default function parse(source: string, dest: string) {
