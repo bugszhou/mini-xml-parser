@@ -25,14 +25,14 @@ function map(childNodes: DocumentFragment["childNodes"]) {
     if (element?.attrs) {
       element.attrs.forEach((attr) => {
         const name = (
-          process.env.isLowerCaseTag ? attr.name.toLowerCase : attr.name
+          process.env.isLowerCaseTag ? attr.name.toLowerCase() : attr.name
         ) as keyof typeof replaceMappings;
 
         let keyName: string = name;
 
         if (
           !replaceMappings[name] &&
-          (name?.startsWith("bind:") || name?.startsWith("catch:"))
+          (name?.startsWith?.("bind:") || name?.startsWith?.("catch:"))
         ) {
           keyName = keyName.replace(/^(bind:)|^(catch:)/, "");
         }

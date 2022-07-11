@@ -21,11 +21,11 @@ function map(childNodes) {
         var element = item;
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
-                var _a;
-                var name = (process.env.isLowerCaseTag ? attr.name.toLowerCase : attr.name);
+                var _a, _b, _c;
+                var name = (process.env.isLowerCaseTag ? attr.name.toLowerCase() : attr.name);
                 var keyName = name;
                 if (!replaceMappings_1.default[name] &&
-                    ((name === null || name === void 0 ? void 0 : name.startsWith("bind:")) || (name === null || name === void 0 ? void 0 : name.startsWith("catch:")))) {
+                    (((_a = name === null || name === void 0 ? void 0 : name.startsWith) === null || _a === void 0 ? void 0 : _a.call(name, "bind:")) || ((_b = name === null || name === void 0 ? void 0 : name.startsWith) === null || _b === void 0 ? void 0 : _b.call(name, "catch:")))) {
                     keyName = keyName.replace(/^(bind:)|^(catch:)/, "");
                 }
                 keyName =
@@ -33,7 +33,7 @@ function map(childNodes) {
                 attr.name = keyName;
                 if (element.nodeName === "image" &&
                     attr.name === "src" &&
-                    !((_a = attr.value) === null || _a === void 0 ? void 0 : _a.startsWith("{{")) &&
+                    !((_c = attr.value) === null || _c === void 0 ? void 0 : _c.startsWith("{{")) &&
                     process.env.useRootPath) {
                     attr.value =
                         "/" +
