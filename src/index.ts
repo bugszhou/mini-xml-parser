@@ -30,11 +30,6 @@ function map(childNodes: DocumentFragment["childNodes"]) {
   childNodes?.forEach((item) => {
     const element = item as unknown as Element;
 
-    if (config.isLowerCaseTag) {
-      element.nodeName = element?.nodeName?.toLowerCase?.() || element.nodeName;
-      element.tagName = element?.tagName?.toLowerCase?.() || element.tagName;
-    }
-
     if (element?.attrs) {
       element.attrs.forEach((attr) => {
         const name = attr.name as keyof typeof replaceMappings;
