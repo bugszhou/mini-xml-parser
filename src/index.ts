@@ -7,7 +7,14 @@ import {
   Element,
 } from "mini-program-xml-parser/dist/tree-adapters/default";
 
+interface IConfig {
+  isLowerCaseTag: boolean;
+  useRootPath: boolean;
+  sourceDir?: string;
+}
+
 let sourcePath = "";
+let config: IConfig = Object.create(null);
 
 export function transform(xml: string) {
   const document = parseFragment(xml);
@@ -25,7 +32,7 @@ function map(childNodes: DocumentFragment["childNodes"]) {
     if (element?.attrs) {
       element.attrs.forEach((attr) => {
         const name = (
-          process.env.isLowerCaseTag ? attr.name.toLowerCase() : attr.name
+          config.isLowerCaseTag ? attr.name.toLowerCase() : attr.name
         ) as keyof typeof replaceMappings;
 
         let keyName: string = name;
@@ -46,12 +53,12 @@ function map(childNodes: DocumentFragment["childNodes"]) {
           element.nodeName === "image" &&
           attr.name === "src" &&
           !attr.value?.startsWith("{{") &&
-          process.env.useRootPath
+          config.useRootPath
         ) {
           attr.value =
             "/" +
             relative(
-              join(process.cwd(), "src"),
+              join(process.cwd(), config.sourceDir || "src"),
               resolve(dirname(sourcePath), attr.value),
             );
         }
@@ -62,10 +69,15 @@ function map(childNodes: DocumentFragment["childNodes"]) {
   });
 }
 
-export default function parse(source: string, dest: string) {
+export default function parse(source: string, dest: string, options: IConfig) {
   sourcePath = join(process.cwd(), source);
+  config = {
+    sourceDir: "src",
+    ...(options ?? {}),
+  };
   const xml = readFileSync(sourcePath, "utf-8");
   const builderXml = transform(xml);
   writeFileSync(dest, builderXml);
   sourcePath = "";
+  config = Object.create(null);
 }

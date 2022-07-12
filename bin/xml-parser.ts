@@ -14,7 +14,11 @@ process.env.isLowerCaseTag = isLowerCase;
 process.env.useRootPath = useRootPath;
 
 try {
-  parser(pathUrl, argv.dest);
+  parser(pathUrl, argv.dest, {
+    isLowerCaseTag: isLowerCase,
+    useRootPath: useRootPath,
+    sourceDir: "src",
+  });
   console.log("转换成功");
 } catch (e) {
   console.error(e);

@@ -1,6 +1,32 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join, relative, resolve, dirname } from 'path';
 
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
 var replaceMappings = {
     "wx:if": "a:if",
     "wx:elif": "a:elif",
@@ -8437,6 +8463,7 @@ exports.parseFragment = parseFragment;
 });
 
 var sourcePath = "";
+var config = Object.create(null);
 function transform(xml) {
     var document = dist.parseFragment(xml);
     // 替换成平台的属性
@@ -8449,7 +8476,7 @@ function map(childNodes) {
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
                 var _a, _b, _c;
-                var name = (process.env.isLowerCaseTag ? attr.name.toLowerCase() : attr.name);
+                var name = (config.isLowerCaseTag ? attr.name.toLowerCase() : attr.name);
                 var keyName = name;
                 if (!replaceMappings[name] &&
                     (((_a = name === null || name === void 0 ? void 0 : name.startsWith) === null || _a === void 0 ? void 0 : _a.call(name, "bind:")) || ((_b = name === null || name === void 0 ? void 0 : name.startsWith) === null || _b === void 0 ? void 0 : _b.call(name, "catch:")))) {
@@ -8461,22 +8488,24 @@ function map(childNodes) {
                 if (element.nodeName === "image" &&
                     attr.name === "src" &&
                     !((_c = attr.value) === null || _c === void 0 ? void 0 : _c.startsWith("{{")) &&
-                    process.env.useRootPath) {
+                    config.useRootPath) {
                     attr.value =
                         "/" +
-                            relative(join(process.cwd(), "src"), resolve(dirname(sourcePath), attr.value));
+                            relative(join(process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value));
                 }
             });
         }
         map(element.childNodes);
     });
 }
-function parse(source, dest) {
+function parse(source, dest, options) {
     sourcePath = join(process.cwd(), source);
+    config = __assign({ sourceDir: "src" }, (options !== null && options !== void 0 ? options : {}));
     var xml = readFileSync(sourcePath, "utf-8");
     var builderXml = transform(xml);
     writeFileSync(dest, builderXml);
     sourcePath = "";
+    config = Object.create(null);
 }
 
 export { parse as default, transform };

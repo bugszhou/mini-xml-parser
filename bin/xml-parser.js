@@ -8,7 +8,11 @@ var argv = minimist(process.argv.slice(2)), pathUrl = argv._[0] || ".", isLowerC
 process.env.isLowerCaseTag = isLowerCase;
 process.env.useRootPath = useRootPath;
 try {
-    (0, mini_xml_parser_min_1["default"])(pathUrl, argv.dest);
+    (0, mini_xml_parser_min_1["default"])(pathUrl, argv.dest, {
+        isLowerCaseTag: isLowerCase,
+        useRootPath: useRootPath,
+        sourceDir: "src"
+    });
     console.log("转换成功");
 }
 catch (e) {
