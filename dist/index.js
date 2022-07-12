@@ -31,10 +31,14 @@ exports.transform = transform;
 function map(childNodes) {
     childNodes === null || childNodes === void 0 ? void 0 : childNodes.forEach(function (item) {
         var element = item;
+        if (config.isLowerCaseTag) {
+            element.nodeName = element.nodeName.toLowerCase();
+            element.tagName = element.tagName.toLowerCase();
+        }
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
                 var _a, _b, _c;
-                var name = (config.isLowerCaseTag ? attr.name.toLowerCase() : attr.name);
+                var name = attr.name;
                 var keyName = name;
                 if (!replaceMappings_1.default[name] &&
                     (((_a = name === null || name === void 0 ? void 0 : name.startsWith) === null || _a === void 0 ? void 0 : _a.call(name, "bind:")) || ((_b = name === null || name === void 0 ? void 0 : name.startsWith) === null || _b === void 0 ? void 0 : _b.call(name, "catch:")))) {
