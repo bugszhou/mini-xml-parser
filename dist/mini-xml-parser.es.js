@@ -8354,10 +8354,11 @@ function transform(xml) {
 }
 function map(childNodes) {
     childNodes === null || childNodes === void 0 ? void 0 : childNodes.forEach(function (item) {
+        var _a, _b, _c, _d;
         var element = item;
         if (config.isLowerCaseTag) {
-            element.nodeName = element.nodeName.toLowerCase();
-            element.tagName = element.tagName.toLowerCase();
+            element.nodeName = ((_b = (_a = element === null || element === void 0 ? void 0 : element.nodeName) === null || _a === void 0 ? void 0 : _a.toLowerCase) === null || _b === void 0 ? void 0 : _b.call(_a)) || element.nodeName;
+            element.tagName = ((_d = (_c = element === null || element === void 0 ? void 0 : element.tagName) === null || _c === void 0 ? void 0 : _c.toLowerCase) === null || _d === void 0 ? void 0 : _d.call(_c)) || element.tagName;
         }
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
