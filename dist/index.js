@@ -49,7 +49,7 @@ function map(childNodes) {
                     config.useRootPath) {
                     attr.value =
                         "/" +
-                            (0, path_1.relative)((0, path_1.join)(process.cwd(), config.sourceDir || "src"), (0, path_1.resolve)((0, path_1.dirname)(sourcePath), attr.value));
+                            (0, path_1.relative)((0, path_1.join)(config.cwd || process.cwd(), config.sourceDir || "src"), (0, path_1.resolve)((0, path_1.dirname)(sourcePath), attr.value));
                 }
             });
         }
@@ -57,8 +57,8 @@ function map(childNodes) {
     });
 }
 function parse(source, dest, options) {
-    sourcePath = (0, path_1.join)(process.cwd(), source);
     config = __assign({ sourceDir: "src" }, (options !== null && options !== void 0 ? options : {}));
+    sourcePath = (0, path_1.join)(config.cwd || process.cwd(), source);
     var xml = (0, fs_1.readFileSync)(sourcePath, "utf-8");
     var builderXml = transform(xml);
     (0, fs_1.writeFileSync)(dest, builderXml);

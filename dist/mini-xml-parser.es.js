@@ -8491,7 +8491,7 @@ function map(childNodes) {
                     config.useRootPath) {
                     attr.value =
                         "/" +
-                            relative(join(process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value));
+                            relative(join(config.cwd || process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value));
                 }
             });
         }
@@ -8499,8 +8499,8 @@ function map(childNodes) {
     });
 }
 function parse(source, dest, options) {
-    sourcePath = join(process.cwd(), source);
     config = __assign({ sourceDir: "src" }, (options !== null && options !== void 0 ? options : {}));
+    sourcePath = join(config.cwd || process.cwd(), source);
     var xml = readFileSync(sourcePath, "utf-8");
     var builderXml = transform(xml);
     writeFileSync(dest, builderXml);

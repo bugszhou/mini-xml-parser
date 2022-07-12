@@ -18,6 +18,7 @@ try {
     isLowerCaseTag: isLowerCase,
     useRootPath: useRootPath,
     sourceDir: "src",
+    cwd: process.cwd(),
   });
   console.log("转换成功");
 } catch (e) {

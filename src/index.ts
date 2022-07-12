@@ -11,6 +11,7 @@ interface IConfig {
   isLowerCaseTag: boolean;
   useRootPath: boolean;
   sourceDir?: string;
+  cwd?: string;
 }
 
 let sourcePath = "";
@@ -58,7 +59,7 @@ function map(childNodes: DocumentFragment["childNodes"]) {
           attr.value =
             "/" +
             relative(
-              join(process.cwd(), config.sourceDir || "src"),
+              join(config.cwd || process.cwd(), config.sourceDir || "src"),
               resolve(dirname(sourcePath), attr.value),
             );
         }
@@ -70,11 +71,11 @@ function map(childNodes: DocumentFragment["childNodes"]) {
 }
 
 export default function parse(source: string, dest: string, options: IConfig) {
-  sourcePath = join(process.cwd(), source);
   config = {
     sourceDir: "src",
     ...(options ?? {}),
   };
+  sourcePath = join(config.cwd || process.cwd(), source);
   const xml = readFileSync(sourcePath, "utf-8");
   const builderXml = transform(xml);
   writeFileSync(dest, builderXml);

@@ -11,7 +11,8 @@ try {
     (0, mini_xml_parser_min_1["default"])(pathUrl, argv.dest, {
         isLowerCaseTag: isLowerCase,
         useRootPath: useRootPath,
-        sourceDir: "src"
+        sourceDir: "src",
+        cwd: process.cwd()
     });
     console.log("转换成功");
 }
