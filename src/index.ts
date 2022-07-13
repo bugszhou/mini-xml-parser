@@ -51,6 +51,18 @@ export function transform(xml: string) {
             return attr;
           });
         }
+        if (["import", "include"].includes(element.tagName)) {
+          return element?.attrs?.map((attr) => {
+            if (attr.name === "src") {
+              return {
+                name: attr.name,
+                value: attr.value?.replace?.(/(\.wxml)$/, ".axml"),
+              };
+            }
+
+            return attr;
+          });
+        }
         return element.attrs;
       },
     },

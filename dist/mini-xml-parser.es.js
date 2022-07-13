@@ -8373,7 +8373,7 @@ function transform(xml) {
                 return element.tagName;
             },
             getAttrList: function (element) {
-                var _a;
+                var _a, _b;
                 if (element.tagName === "wxs") {
                     return (_a = element === null || element === void 0 ? void 0 : element.attrs) === null || _a === void 0 ? void 0 : _a.map(function (attr) {
                         var _a, _b;
@@ -8387,6 +8387,18 @@ function transform(xml) {
                             return {
                                 name: "name",
                                 value: attr.value,
+                            };
+                        }
+                        return attr;
+                    });
+                }
+                if (["import", "include"].includes(element.tagName)) {
+                    return (_b = element === null || element === void 0 ? void 0 : element.attrs) === null || _b === void 0 ? void 0 : _b.map(function (attr) {
+                        var _a, _b;
+                        if (attr.name === "src") {
+                            return {
+                                name: attr.name,
+                                value: (_b = (_a = attr.value) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, /(\.wxml)$/, ".axml"),
                             };
                         }
                         return attr;
