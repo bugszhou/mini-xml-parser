@@ -23,14 +23,14 @@ export function transform(xml: string) {
   return serialize(document, {
     treeAdapter: {
       getTagName(element) {
+        // 替换成平台的属性
+        map([element]);
         if (element.tagName === "wxs") {
           return "import-sjs";
         }
         return element.tagName;
       },
       getAttrList(element) {
-        // 替换成平台的属性
-        map([element]);
         if (element.tagName === "wxs") {
           return element?.attrs?.map((attr) => {
             if (attr.name === "src") {
@@ -96,6 +96,10 @@ function map(childNodes: DocumentFragment["childNodes"]) {
           !attr.value?.startsWith("{{") &&
           config.useRootPath
         ) {
+          console.log(join(config.cwd || process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value), relative(
+            join(config.cwd || process.cwd(), config.sourceDir || "src"),
+            resolve(dirname(sourcePath), attr.value),
+          ))
           attr.value =
             "/" +
             relative(
@@ -105,8 +109,6 @@ function map(childNodes: DocumentFragment["childNodes"]) {
         }
       });
     }
-
-    map(element.childNodes);
   });
 }
 

@@ -26,6 +26,8 @@ function transform(xml) {
     return (0, mini_program_xml_parser_1.serialize)(document, {
         treeAdapter: {
             getTagName: function (element) {
+                // 替换成平台的属性
+                map([element]);
                 if (element.tagName === "wxs") {
                     return "import-sjs";
                 }
@@ -33,8 +35,6 @@ function transform(xml) {
             },
             getAttrList: function (element) {
                 var _a, _b;
-                // 替换成平台的属性
-                map([element]);
                 if (element.tagName === "wxs") {
                     return (_a = element === null || element === void 0 ? void 0 : element.attrs) === null || _a === void 0 ? void 0 : _a.map(function (attr) {
                         var _a, _b;
@@ -90,13 +90,13 @@ function map(childNodes) {
                     attr.name === "src" &&
                     !((_c = attr.value) === null || _c === void 0 ? void 0 : _c.startsWith("{{")) &&
                     config.useRootPath) {
+                    console.log((0, path_1.join)(config.cwd || process.cwd(), config.sourceDir || "src"), (0, path_1.resolve)((0, path_1.dirname)(sourcePath), attr.value), (0, path_1.relative)((0, path_1.join)(config.cwd || process.cwd(), config.sourceDir || "src"), (0, path_1.resolve)((0, path_1.dirname)(sourcePath), attr.value)));
                     attr.value =
                         "/" +
                             (0, path_1.relative)((0, path_1.join)(config.cwd || process.cwd(), config.sourceDir || "src"), (0, path_1.resolve)((0, path_1.dirname)(sourcePath), attr.value));
                 }
             });
         }
-        map(element.childNodes);
     });
 }
 function parse(source, dest, options) {

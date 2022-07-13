@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { join, relative, resolve, dirname } from 'path';
+import { join, resolve, dirname, relative } from 'path';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -8373,6 +8373,8 @@ function transform(xml) {
     return dist.serialize(document, {
         treeAdapter: {
             getTagName: function (element) {
+                // 替换成平台的属性
+                map([element]);
                 if (element.tagName === "wxs") {
                     return "import-sjs";
                 }
@@ -8380,8 +8382,6 @@ function transform(xml) {
             },
             getAttrList: function (element) {
                 var _a, _b;
-                // 替换成平台的属性
-                map([element]);
                 if (element.tagName === "wxs") {
                     return (_a = element === null || element === void 0 ? void 0 : element.attrs) === null || _a === void 0 ? void 0 : _a.map(function (attr) {
                         var _a, _b;
@@ -8436,13 +8436,13 @@ function map(childNodes) {
                     attr.name === "src" &&
                     !((_c = attr.value) === null || _c === void 0 ? void 0 : _c.startsWith("{{")) &&
                     config.useRootPath) {
+                    console.log(join(config.cwd || process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value), relative(join(config.cwd || process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value)));
                     attr.value =
                         "/" +
                             relative(join(config.cwd || process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value));
                 }
             });
         }
-        map(element.childNodes);
     });
 }
 function parse(source, dest, options) {
