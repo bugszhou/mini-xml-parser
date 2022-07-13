@@ -23,7 +23,38 @@ export function transform(xml: string) {
   // 替换成平台的属性
   map(document.childNodes);
 
-  return serialize(document);
+  return serialize(document, {
+    treeAdapter: {
+      getTagName(element) {
+        if (element.tagName === "wxs") {
+          return "import-sjs";
+        }
+        return element.tagName;
+      },
+      getAttrList(element) {
+        if (element.tagName === "wxs") {
+          return element?.attrs?.map((attr) => {
+            if (attr.name === "src") {
+              return {
+                name: "from",
+                value: attr.value?.replace?.(/(\.wxs)$/, ".sjs"),
+              };
+            }
+
+            if (attr.name === "module") {
+              return {
+                name: "name",
+                value: attr.value,
+              };
+            }
+
+            return attr;
+          });
+        }
+        return element.attrs;
+      },
+    },
+  });
 }
 
 function map(childNodes: DocumentFragment["childNodes"]) {

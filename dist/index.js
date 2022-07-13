@@ -25,7 +25,38 @@ function transform(xml) {
     var document = (0, mini_program_xml_parser_1.parseFragment)(xml);
     // 替换成平台的属性
     map(document.childNodes);
-    return (0, mini_program_xml_parser_1.serialize)(document);
+    return (0, mini_program_xml_parser_1.serialize)(document, {
+        treeAdapter: {
+            getTagName: function (element) {
+                if (element.tagName === "wxs") {
+                    return "import-sjs";
+                }
+                return element.tagName;
+            },
+            getAttrList: function (element) {
+                var _a;
+                if (element.tagName === "wxs") {
+                    return (_a = element === null || element === void 0 ? void 0 : element.attrs) === null || _a === void 0 ? void 0 : _a.map(function (attr) {
+                        var _a, _b;
+                        if (attr.name === "src") {
+                            return {
+                                name: "from",
+                                value: (_b = (_a = attr.value) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, /(\.wxs)$/, ".sjs"),
+                            };
+                        }
+                        if (attr.name === "module") {
+                            return {
+                                name: "name",
+                                value: attr.value,
+                            };
+                        }
+                        return attr;
+                    });
+                }
+                return element.attrs;
+            },
+        },
+    });
 }
 exports.transform = transform;
 function map(childNodes) {

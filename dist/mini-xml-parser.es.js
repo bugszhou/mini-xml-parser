@@ -8154,7 +8154,9 @@ const defaultOpts = {
  * @param options Serialization options.
  */
 function serialize(node, options) {
-    const opts = Object.assign(Object.assign({}, defaultOpts), options);
+    var _a;
+    const defaultTreeAdapter = defaultOpts.treeAdapter;
+    const opts = Object.assign(Object.assign(Object.assign({}, defaultOpts), options), { treeAdapter: Object.assign(Object.assign({}, defaultTreeAdapter), ((_a = options === null || options === void 0 ? void 0 : options.treeAdapter) !== null && _a !== void 0 ? _a : {})) });
     if (isVoidElement(node, opts)) {
         return "";
     }
@@ -8181,19 +8183,22 @@ exports.serialize = serialize;
  * @param options Serialization options.
  */
 function serializeOuter(node, options) {
-    const opts = Object.assign(Object.assign({}, defaultOpts), options);
+    var _a;
+    const defaultTreeAdapter = defaultOpts.treeAdapter;
+    const opts = Object.assign(Object.assign(Object.assign({}, defaultOpts), options), { treeAdapter: Object.assign(Object.assign({}, defaultTreeAdapter), ((_a = options === null || options === void 0 ? void 0 : options.treeAdapter) !== null && _a !== void 0 ? _a : {})) });
     return serializeNode(node, opts);
 }
 exports.serializeOuter = serializeOuter;
 function serializeChildNodes(parentNode, options) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     let html$1 = "";
     // Get container of the child nodes
-    const container = options.treeAdapter.isElementNode(parentNode) &&
-        options.treeAdapter.getTagName(parentNode) === html.TAG_NAMES.TEMPLATE &&
-        options.treeAdapter.getNamespaceURI(parentNode) === html.NS.HTML
-        ? options.treeAdapter.getTemplateContent(parentNode)
+    const container = ((_b = (_a = options.treeAdapter) === null || _a === void 0 ? void 0 : _a.isElementNode) === null || _b === void 0 ? void 0 : _b.call(_a, parentNode)) &&
+        ((_d = (_c = options.treeAdapter) === null || _c === void 0 ? void 0 : _c.getTagName) === null || _d === void 0 ? void 0 : _d.call(_c, parentNode)) === html.TAG_NAMES.TEMPLATE &&
+        ((_f = (_e = options.treeAdapter) === null || _e === void 0 ? void 0 : _e.getNamespaceURI) === null || _f === void 0 ? void 0 : _f.call(_e, parentNode)) === html.NS.HTML
+        ? (_h = (_g = options.treeAdapter) === null || _g === void 0 ? void 0 : _g.getTemplateContent) === null || _h === void 0 ? void 0 : _h.call(_g, parentNode)
         : parentNode;
-    const childNodes = options.treeAdapter.getChildNodes(container);
+    const childNodes = (_k = (_j = options.treeAdapter) === null || _j === void 0 ? void 0 : _j.getChildNodes) === null || _k === void 0 ? void 0 : _k.call(_j, container);
     if (childNodes) {
         for (const currentNode of childNodes) {
             html$1 += serializeNode(currentNode, options);
@@ -8218,7 +8223,8 @@ function serializeNode(node, options) {
     return "";
 }
 function serializeElement(node, options) {
-    const tn = options.treeAdapter.getTagName(node);
+    var _a, _b;
+    const tn = (_b = (_a = options.treeAdapter).getTagName) === null || _b === void 0 ? void 0 : _b.call(_a, node);
     return `<${tn}${serializeAttributes(node, options)}>${isVoidElement(node, options)
         ? ""
         : `${serializeChildNodes(node, options)}</${tn}>`}`;
@@ -8256,15 +8262,18 @@ function serializeAttributes(node, { treeAdapter }) {
     return html$1;
 }
 function serializeTextNode(node, options) {
+    var _a, _b;
     const { treeAdapter } = options;
-    const content = treeAdapter.getTextNodeContent(node);
+    const content = (_b = (_a = treeAdapter.getTextNodeContent) === null || _a === void 0 ? void 0 : _a.call(treeAdapter, node)) !== null && _b !== void 0 ? _b : "";
     return content;
 }
 function serializeCommentNode(node, { treeAdapter }) {
-    return `<!--${treeAdapter.getCommentNodeContent(node)}-->`;
+    var _a;
+    return `<!--${(_a = treeAdapter === null || treeAdapter === void 0 ? void 0 : treeAdapter.getCommentNodeContent) === null || _a === void 0 ? void 0 : _a.call(treeAdapter, node)}-->`;
 }
 function serializeDocumentTypeNode(node, { treeAdapter }) {
-    return `<!DOCTYPE ${treeAdapter.getDocumentTypeNodeName(node)}>`;
+    var _a;
+    return `<!DOCTYPE ${(_a = treeAdapter === null || treeAdapter === void 0 ? void 0 : treeAdapter.getDocumentTypeNodeName) === null || _a === void 0 ? void 0 : _a.call(treeAdapter, node)}>`;
 }
 
 });
@@ -8355,7 +8364,38 @@ function transform(xml) {
     var document = dist.parseFragment(xml);
     // 替换成平台的属性
     map(document.childNodes);
-    return dist.serialize(document);
+    return dist.serialize(document, {
+        treeAdapter: {
+            getTagName: function (element) {
+                if (element.tagName === "wxs") {
+                    return "import-sjs";
+                }
+                return element.tagName;
+            },
+            getAttrList: function (element) {
+                var _a;
+                if (element.tagName === "wxs") {
+                    return (_a = element === null || element === void 0 ? void 0 : element.attrs) === null || _a === void 0 ? void 0 : _a.map(function (attr) {
+                        var _a, _b;
+                        if (attr.name === "src") {
+                            return {
+                                name: "from",
+                                value: (_b = (_a = attr.value) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, /(\.wxs)$/, ".sjs"),
+                            };
+                        }
+                        if (attr.name === "module") {
+                            return {
+                                name: "name",
+                                value: attr.value,
+                            };
+                        }
+                        return attr;
+                    });
+                }
+                return element.attrs;
+            },
+        },
+    });
 }
 function map(childNodes) {
     childNodes === null || childNodes === void 0 ? void 0 : childNodes.forEach(function (item) {
