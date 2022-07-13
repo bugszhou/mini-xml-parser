@@ -20,9 +20,6 @@ let config: IConfig = Object.create(null);
 export function transform(xml: string) {
   const document = parseFragment(xml);
 
-  // 替换成平台的属性
-  map(document.childNodes);
-
   return serialize(document, {
     treeAdapter: {
       getTagName(element) {
@@ -32,6 +29,8 @@ export function transform(xml: string) {
         return element.tagName;
       },
       getAttrList(element) {
+        // 替换成平台的属性
+        map([element]);
         if (element.tagName === "wxs") {
           return element?.attrs?.map((attr) => {
             if (attr.name === "src") {

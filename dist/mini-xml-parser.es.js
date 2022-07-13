@@ -1854,6 +1854,7 @@ class Tokenizer {
                 break;
             }
             case 39 /* State.SELF_CLOSING_START_TAG */: {
+                debugger;
                 this._stateSelfClosingStartTag(cp);
                 break;
             }
@@ -4518,7 +4519,8 @@ exports.defaultTreeAdapter = {
             childNodes: [],
         };
     },
-    createElement(tagName, namespaceURI, attrs) {
+    createElement(tagName, namespaceURI, attrs, token) {
+        var _a;
         return {
             nodeName: tagName,
             tagName,
@@ -4526,6 +4528,7 @@ exports.defaultTreeAdapter = {
             namespaceURI,
             childNodes: [],
             parentNode: null,
+            selfClosing: (_a = token === null || token === void 0 ? void 0 : token.selfClosing) !== null && _a !== void 0 ? _a : false,
         };
     },
     createCommentNode(data) {
@@ -5318,11 +5321,11 @@ class Parser {
         }
     }
     _appendElement(token, namespaceURI) {
-        const element = this.treeAdapter.createElement(token.tagName, namespaceURI, token.attrs);
+        const element = this.treeAdapter.createElement(token.tagName, namespaceURI, token.attrs, token);
         this._attachElementToTree(element, token.location);
     }
     _insertElement(token, namespaceURI) {
-        const element = this.treeAdapter.createElement(token.tagName, namespaceURI, token.attrs);
+        const element = this.treeAdapter.createElement(token.tagName, namespaceURI, token.attrs, token);
         this._attachElementToTree(element, token.location);
         this.openElements.push(element, token.tagID);
     }
@@ -5332,7 +5335,7 @@ class Parser {
         this.openElements.push(element, tagID);
     }
     _insertTemplate(token) {
-        const tmpl = this.treeAdapter.createElement(token.tagName, html.NS.HTML, token.attrs);
+        const tmpl = this.treeAdapter.createElement(token.tagName, html.NS.HTML, token.attrs, token);
         const content = this.treeAdapter.createDocumentFragment();
         this.treeAdapter.setTemplateContent(tmpl, content);
         this._attachElementToTree(tmpl, token.location);
@@ -6122,7 +6125,7 @@ function aaInnerLoop(p, furthestBlock, formattingElement) {
 //Step 13.7 of the algorithm
 function aaRecreateElementFromEntry(p, elementEntry) {
     const ns = p.treeAdapter.getNamespaceURI(elementEntry.element);
-    const newElement = p.treeAdapter.createElement(elementEntry.token.tagName, ns, elementEntry.token.attrs);
+    const newElement = p.treeAdapter.createElement(elementEntry.token.tagName, ns, elementEntry.token.attrs, elementEntry.token);
     p.openElements.replace(elementEntry.element, newElement);
     elementEntry.element = newElement;
     return newElement;
@@ -6146,7 +6149,7 @@ function aaInsertLastNodeInCommonAncestor(p, commonAncestor, lastElement) {
 function aaReplaceFormattingElement(p, furthestBlock, formattingElementEntry) {
     const ns = p.treeAdapter.getNamespaceURI(formattingElementEntry.element);
     const { token } = formattingElementEntry;
-    const newElement = p.treeAdapter.createElement(token.tagName, ns, token.attrs);
+    const newElement = p.treeAdapter.createElement(token.tagName, ns, token.attrs, Object.create(null));
     p._adoptNodes(furthestBlock, newElement);
     p.treeAdapter.appendChild(furthestBlock, newElement);
     p.activeFormattingElements.insertElementAfterBookmark(newElement, token);
@@ -8121,6 +8124,8 @@ const VOID_ELEMENTS = new Set([
     html.TAG_NAMES.SOURCE,
     html.TAG_NAMES.TRACK,
     html.TAG_NAMES.WBR,
+    "img",
+    "import",
 ]);
 function isVoidElement(node, options) {
     return (options.treeAdapter.isElementNode(node) &&
@@ -8225,6 +8230,9 @@ function serializeNode(node, options) {
 function serializeElement(node, options) {
     var _a, _b;
     const tn = (_b = (_a = options.treeAdapter).getTagName) === null || _b === void 0 ? void 0 : _b.call(_a, node);
+    if (node.selfClosing) {
+        return `<${tn}${serializeAttributes(node, options)}/>${serializeChildNodes(node, options)}`;
+    }
     return `<${tn}${serializeAttributes(node, options)}>${isVoidElement(node, options)
         ? ""
         : `${serializeChildNodes(node, options)}</${tn}>`}`;
@@ -8362,8 +8370,6 @@ var sourcePath = "";
 var config = Object.create(null);
 function transform(xml) {
     var document = dist.parseFragment(xml);
-    // 替换成平台的属性
-    map(document.childNodes);
     return dist.serialize(document, {
         treeAdapter: {
             getTagName: function (element) {
@@ -8374,6 +8380,8 @@ function transform(xml) {
             },
             getAttrList: function (element) {
                 var _a, _b;
+                // 替换成平台的属性
+                map([element]);
                 if (element.tagName === "wxs") {
                     return (_a = element === null || element === void 0 ? void 0 : element.attrs) === null || _a === void 0 ? void 0 : _a.map(function (attr) {
                         var _a, _b;
