@@ -6,6 +6,8 @@ import {
   DocumentFragment,
   Element,
 } from "mini-program-xml-parser/dist/tree-adapters/default";
+import html from "./html";
+import getTagMapping from "./html/aliapp/xml";
 
 interface IConfig {
   isLowerCaseTag: boolean;
@@ -71,12 +73,16 @@ export function transform(xml: string) {
 function map(childNodes: DocumentFragment["childNodes"]) {
   childNodes?.forEach((item) => {
     const element = item as unknown as Element;
+    const aliappTagName = html.weapp2aliapp[element.tagName];
+    const attrsMapping =
+      getTagMapping(aliappTagName)?.attrs ?? Object.create(null);
+
 
     if (element?.attrs) {
       element.attrs.forEach((attr) => {
         const name = attr.name as keyof typeof replaceMappings;
 
-        let keyName: string = name;
+        let keyName: string = attrsMapping?.weapp?.[name] ?? name;
 
         if (
           !replaceMappings[name] &&
@@ -96,10 +102,6 @@ function map(childNodes: DocumentFragment["childNodes"]) {
           !attr.value?.startsWith("{{") &&
           config.useRootPath
         ) {
-          console.log(join(config.cwd || process.cwd(), config.sourceDir || "src"), resolve(dirname(sourcePath), attr.value), relative(
-            join(config.cwd || process.cwd(), config.sourceDir || "src"),
-            resolve(dirname(sourcePath), attr.value),
-          ))
           attr.value =
             "/" +
             relative(
