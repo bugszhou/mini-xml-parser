@@ -85,7 +85,7 @@ function map(childNodes) {
         var attrsMapping = (_b = (_a = getConfigElementAttrs(element.tagName)) !== null && _a !== void 0 ? _a : (0, xml_1.default)(element.tagName)) !== null && _b !== void 0 ? _b : Object.create(null);
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
-                var _a, _b, _c, _d;
+                var _a, _b, _c, _d, _e;
                 var name = attr.name;
                 var keyName = (_a = attrsMapping === null || attrsMapping === void 0 ? void 0 : attrsMapping[name]) !== null && _a !== void 0 ? _a : name;
                 if (!replaceMappings_1.default[name] &&
@@ -97,7 +97,8 @@ function map(childNodes) {
                 attr.name = keyName;
                 if (element.nodeName === "image" &&
                     attr.name === "src" &&
-                    !((_d = attr.value) === null || _d === void 0 ? void 0 : _d.startsWith("{{")) &&
+                    !((_d = attr.value) === null || _d === void 0 ? void 0 : _d.startsWith("/")) &&
+                    !((_e = attr.value) === null || _e === void 0 ? void 0 : _e.startsWith("{{")) &&
                     config.useRootPath) {
                     attr.value =
                         "/" +

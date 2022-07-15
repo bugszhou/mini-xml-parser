@@ -110,6 +110,7 @@ function map(childNodes: DocumentFragment["childNodes"]) {
         if (
           element.nodeName === "image" &&
           attr.name === "src" &&
+          !attr.value?.startsWith("/") &&
           !attr.value?.startsWith("{{") &&
           config.useRootPath
         ) {
