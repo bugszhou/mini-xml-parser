@@ -77,7 +77,6 @@ function map(childNodes: DocumentFragment["childNodes"]) {
     const attrsMapping =
       getTagMapping(aliappTagName)?.attrs ?? Object.create(null);
 
-
     if (element?.attrs) {
       element.attrs.forEach((attr) => {
         const name = attr.name as keyof typeof replaceMappings;
