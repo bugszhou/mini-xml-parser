@@ -1,6 +1,8 @@
+import { IElementMappings } from "./__interface__";
 interface IConfig {
     isLowerCaseTag: boolean;
     useRootPath: boolean;
+    elementMappings: IElementMappings;
     sourceDir?: string;
     cwd?: string;
 }

@@ -6,18 +6,28 @@ import {
   DocumentFragment,
   Element,
 } from "mini-program-xml-parser/dist/tree-adapters/default";
-import html from "./html";
 import getTagMapping from "./html/aliapp/xml";
+import { IElementMappings } from "./__interface__";
 
 interface IConfig {
   isLowerCaseTag: boolean;
   useRootPath: boolean;
+  elementMappings: IElementMappings;
   sourceDir?: string;
   cwd?: string;
 }
 
 let sourcePath = "";
 let config: IConfig = Object.create(null);
+
+function getConfigElementAttrs(tagName: string) {
+  const platformTagName: string = config?.elementMappings?.elements?.[tagName];
+
+  const attrs: Record<string, string> =
+    config?.elementMappings?.elementAttrs?.[platformTagName];
+
+  return attrs;
+}
 
 export function transform(xml: string) {
   const document = parseFragment(xml);
@@ -73,15 +83,17 @@ export function transform(xml: string) {
 function map(childNodes: DocumentFragment["childNodes"]) {
   childNodes?.forEach((item) => {
     const element = item as unknown as Element;
-    const aliappTagName = html.weapp2aliapp[element.tagName];
+
     const attrsMapping =
-      getTagMapping(aliappTagName)?.attrs ?? Object.create(null);
+      getConfigElementAttrs(element.tagName) ??
+      getTagMapping(element.tagName) ??
+      Object.create(null);
 
     if (element?.attrs) {
       element.attrs.forEach((attr) => {
         const name = attr.name as keyof typeof replaceMappings;
 
-        let keyName: string = attrsMapping?.weapp?.[name] ?? name;
+        let keyName: string = attrsMapping?.[name] ?? name;
 
         if (
           !replaceMappings[name] &&

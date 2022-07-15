@@ -19,10 +19,15 @@ var fs_1 = require("fs");
 var path_1 = require("path");
 var replaceMappings_1 = __importDefault(require("./replaceMappings"));
 var mini_program_xml_parser_1 = require("mini-program-xml-parser");
-var html_1 = __importDefault(require("./html"));
 var xml_1 = __importDefault(require("./html/aliapp/xml"));
 var sourcePath = "";
 var config = Object.create(null);
+function getConfigElementAttrs(tagName) {
+    var _a, _b, _c, _d;
+    var platformTagName = (_b = (_a = config === null || config === void 0 ? void 0 : config.elementMappings) === null || _a === void 0 ? void 0 : _a.elements) === null || _b === void 0 ? void 0 : _b[tagName];
+    var attrs = (_d = (_c = config === null || config === void 0 ? void 0 : config.elementMappings) === null || _c === void 0 ? void 0 : _c.elementAttrs) === null || _d === void 0 ? void 0 : _d[platformTagName];
+    return attrs;
+}
 function transform(xml) {
     var document = (0, mini_program_xml_parser_1.parseFragment)(xml);
     return (0, mini_program_xml_parser_1.serialize)(document, {
@@ -77,15 +82,14 @@ function map(childNodes) {
     childNodes === null || childNodes === void 0 ? void 0 : childNodes.forEach(function (item) {
         var _a, _b;
         var element = item;
-        var aliappTagName = html_1.default.weapp2aliapp[element.tagName];
-        var attrsMapping = (_b = (_a = (0, xml_1.default)(aliappTagName)) === null || _a === void 0 ? void 0 : _a.attrs) !== null && _b !== void 0 ? _b : Object.create(null);
+        var attrsMapping = (_b = (_a = getConfigElementAttrs(element.tagName)) !== null && _a !== void 0 ? _a : (0, xml_1.default)(element.tagName)) !== null && _b !== void 0 ? _b : Object.create(null);
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
-                var _a, _b, _c, _d, _e;
+                var _a, _b, _c, _d;
                 var name = attr.name;
-                var keyName = (_b = (_a = attrsMapping === null || attrsMapping === void 0 ? void 0 : attrsMapping.weapp) === null || _a === void 0 ? void 0 : _a[name]) !== null && _b !== void 0 ? _b : name;
+                var keyName = (_a = attrsMapping === null || attrsMapping === void 0 ? void 0 : attrsMapping[name]) !== null && _a !== void 0 ? _a : name;
                 if (!replaceMappings_1.default[name] &&
-                    (((_c = name === null || name === void 0 ? void 0 : name.startsWith) === null || _c === void 0 ? void 0 : _c.call(name, "bind:")) || ((_d = name === null || name === void 0 ? void 0 : name.startsWith) === null || _d === void 0 ? void 0 : _d.call(name, "catch:")))) {
+                    (((_b = name === null || name === void 0 ? void 0 : name.startsWith) === null || _b === void 0 ? void 0 : _b.call(name, "bind:")) || ((_c = name === null || name === void 0 ? void 0 : name.startsWith) === null || _c === void 0 ? void 0 : _c.call(name, "catch:")))) {
                     keyName = keyName.replace(/^(bind:)|^(catch:)/, "");
                 }
                 keyName =
@@ -93,7 +97,7 @@ function map(childNodes) {
                 attr.name = keyName;
                 if (element.nodeName === "image" &&
                     attr.name === "src" &&
-                    !((_e = attr.value) === null || _e === void 0 ? void 0 : _e.startsWith("{{")) &&
+                    !((_d = attr.value) === null || _d === void 0 ? void 0 : _d.startsWith("{{")) &&
                     config.useRootPath) {
                     attr.value =
                         "/" +

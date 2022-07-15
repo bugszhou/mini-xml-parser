@@ -695,7 +695,7 @@ exports.decodeXML = decodeXML;
 
 });
 
-var html$1 = createCommonjsModule(function (module, exports) {
+var html = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hasUnescapedText = exports.isNumberedHeader = exports.SPECIAL_ELEMENTS = exports.getTagID = exports.TAG_ID = exports.TAG_NAMES = exports.DOCUMENT_MODE = exports.ATTRS = exports.NS = void 0;
 /** All valid namespaces in HTML. */
@@ -1439,7 +1439,7 @@ class Tokenizer {
         this.currentToken = {
             type: token.TokenType.START_TAG,
             tagName: '',
-            tagID: html$1.TAG_ID.UNKNOWN,
+            tagID: html.TAG_ID.UNKNOWN,
             selfClosing: false,
             ackSelfClosing: false,
             attrs: [],
@@ -1450,7 +1450,7 @@ class Tokenizer {
         this.currentToken = {
             type: token.TokenType.END_TAG,
             tagName: '',
-            tagID: html$1.TAG_ID.UNKNOWN,
+            tagID: html.TAG_ID.UNKNOWN,
             selfClosing: false,
             ackSelfClosing: false,
             attrs: [],
@@ -1527,7 +1527,7 @@ class Tokenizer {
     emitCurrentTagToken() {
         const ct = this.currentToken;
         this.prepareToken(ct);
-        ct.tagID = (0, html$1.getTagID)(ct.tagName);
+        ct.tagID = (0, html.getTagID)(ct.tagName);
         if (ct.type === token.TokenType.START_TAG) {
             this.lastStartTagName = ct.tagName;
             this.handler.onStartTag(ct);
@@ -4055,43 +4055,43 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenElementStack = void 0;
 
 //Element utils
-const IMPLICIT_END_TAG_REQUIRED = new Set([html$1.TAG_ID.DD, html$1.TAG_ID.DT, html$1.TAG_ID.LI, html$1.TAG_ID.OPTGROUP, html$1.TAG_ID.OPTION, html$1.TAG_ID.P, html$1.TAG_ID.RB, html$1.TAG_ID.RP, html$1.TAG_ID.RT, html$1.TAG_ID.RTC]);
+const IMPLICIT_END_TAG_REQUIRED = new Set([html.TAG_ID.DD, html.TAG_ID.DT, html.TAG_ID.LI, html.TAG_ID.OPTGROUP, html.TAG_ID.OPTION, html.TAG_ID.P, html.TAG_ID.RB, html.TAG_ID.RP, html.TAG_ID.RT, html.TAG_ID.RTC]);
 const IMPLICIT_END_TAG_REQUIRED_THOROUGHLY = new Set([
     ...IMPLICIT_END_TAG_REQUIRED,
-    html$1.TAG_ID.CAPTION,
-    html$1.TAG_ID.COLGROUP,
-    html$1.TAG_ID.TBODY,
-    html$1.TAG_ID.TD,
-    html$1.TAG_ID.TFOOT,
-    html$1.TAG_ID.TH,
-    html$1.TAG_ID.THEAD,
-    html$1.TAG_ID.TR,
+    html.TAG_ID.CAPTION,
+    html.TAG_ID.COLGROUP,
+    html.TAG_ID.TBODY,
+    html.TAG_ID.TD,
+    html.TAG_ID.TFOOT,
+    html.TAG_ID.TH,
+    html.TAG_ID.THEAD,
+    html.TAG_ID.TR,
 ]);
 const SCOPING_ELEMENT_NS = new Map([
-    [html$1.TAG_ID.APPLET, html$1.NS.HTML],
-    [html$1.TAG_ID.CAPTION, html$1.NS.HTML],
-    [html$1.TAG_ID.HTML, html$1.NS.HTML],
-    [html$1.TAG_ID.MARQUEE, html$1.NS.HTML],
-    [html$1.TAG_ID.OBJECT, html$1.NS.HTML],
-    [html$1.TAG_ID.TABLE, html$1.NS.HTML],
-    [html$1.TAG_ID.TD, html$1.NS.HTML],
-    [html$1.TAG_ID.TEMPLATE, html$1.NS.HTML],
-    [html$1.TAG_ID.TH, html$1.NS.HTML],
-    [html$1.TAG_ID.ANNOTATION_XML, html$1.NS.MATHML],
-    [html$1.TAG_ID.MI, html$1.NS.MATHML],
-    [html$1.TAG_ID.MN, html$1.NS.MATHML],
-    [html$1.TAG_ID.MO, html$1.NS.MATHML],
-    [html$1.TAG_ID.MS, html$1.NS.MATHML],
-    [html$1.TAG_ID.MTEXT, html$1.NS.MATHML],
-    [html$1.TAG_ID.DESC, html$1.NS.SVG],
-    [html$1.TAG_ID.FOREIGN_OBJECT, html$1.NS.SVG],
-    [html$1.TAG_ID.TITLE, html$1.NS.SVG],
+    [html.TAG_ID.APPLET, html.NS.HTML],
+    [html.TAG_ID.CAPTION, html.NS.HTML],
+    [html.TAG_ID.HTML, html.NS.HTML],
+    [html.TAG_ID.MARQUEE, html.NS.HTML],
+    [html.TAG_ID.OBJECT, html.NS.HTML],
+    [html.TAG_ID.TABLE, html.NS.HTML],
+    [html.TAG_ID.TD, html.NS.HTML],
+    [html.TAG_ID.TEMPLATE, html.NS.HTML],
+    [html.TAG_ID.TH, html.NS.HTML],
+    [html.TAG_ID.ANNOTATION_XML, html.NS.MATHML],
+    [html.TAG_ID.MI, html.NS.MATHML],
+    [html.TAG_ID.MN, html.NS.MATHML],
+    [html.TAG_ID.MO, html.NS.MATHML],
+    [html.TAG_ID.MS, html.NS.MATHML],
+    [html.TAG_ID.MTEXT, html.NS.MATHML],
+    [html.TAG_ID.DESC, html.NS.SVG],
+    [html.TAG_ID.FOREIGN_OBJECT, html.NS.SVG],
+    [html.TAG_ID.TITLE, html.NS.SVG],
 ]);
-const NAMED_HEADERS = [html$1.TAG_ID.H1, html$1.TAG_ID.H2, html$1.TAG_ID.H3, html$1.TAG_ID.H4, html$1.TAG_ID.H5, html$1.TAG_ID.H6];
-const TABLE_ROW_CONTEXT = [html$1.TAG_ID.TR, html$1.TAG_ID.TEMPLATE, html$1.TAG_ID.HTML];
-const TABLE_BODY_CONTEXT = [html$1.TAG_ID.TBODY, html$1.TAG_ID.TFOOT, html$1.TAG_ID.THEAD, html$1.TAG_ID.TEMPLATE, html$1.TAG_ID.HTML];
-const TABLE_CONTEXT = [html$1.TAG_ID.TABLE, html$1.TAG_ID.TEMPLATE, html$1.TAG_ID.HTML];
-const TABLE_CELLS = [html$1.TAG_ID.TD, html$1.TAG_ID.TH];
+const NAMED_HEADERS = [html.TAG_ID.H1, html.TAG_ID.H2, html.TAG_ID.H3, html.TAG_ID.H4, html.TAG_ID.H5, html.TAG_ID.H6];
+const TABLE_ROW_CONTEXT = [html.TAG_ID.TR, html.TAG_ID.TEMPLATE, html.TAG_ID.HTML];
+const TABLE_BODY_CONTEXT = [html.TAG_ID.TBODY, html.TAG_ID.TFOOT, html.TAG_ID.THEAD, html.TAG_ID.TEMPLATE, html.TAG_ID.HTML];
+const TABLE_CONTEXT = [html.TAG_ID.TABLE, html.TAG_ID.TEMPLATE, html.TAG_ID.HTML];
+const TABLE_CELLS = [html.TAG_ID.TD, html.TAG_ID.TH];
 //Stack of open elements
 class OpenElementStack {
     constructor(document, treeAdapter, handler) {
@@ -4101,7 +4101,7 @@ class OpenElementStack {
         this.tagIDs = [];
         this.stackTop = -1;
         this.tmplCount = 0;
-        this.currentTagId = html$1.TAG_ID.UNKNOWN;
+        this.currentTagId = html.TAG_ID.UNKNOWN;
         this.current = document;
     }
     get currentTmplContentOrNode() {
@@ -4113,7 +4113,7 @@ class OpenElementStack {
     }
     //Update current element
     _isInTemplate() {
-        return this.currentTagId === html$1.TAG_ID.TEMPLATE && this.treeAdapter.getNamespaceURI(this.current) === html$1.NS.HTML;
+        return this.currentTagId === html.TAG_ID.TEMPLATE && this.treeAdapter.getNamespaceURI(this.current) === html.NS.HTML;
     }
     _updateCurrentElement() {
         this.current = this.items[this.stackTop];
@@ -4161,7 +4161,7 @@ class OpenElementStack {
         let targetIdx = this.stackTop + 1;
         do {
             targetIdx = this.tagIDs.lastIndexOf(tagName, targetIdx - 1);
-        } while (targetIdx > 0 && this.treeAdapter.getNamespaceURI(this.items[targetIdx]) !== html$1.NS.HTML);
+        } while (targetIdx > 0 && this.treeAdapter.getNamespaceURI(this.items[targetIdx]) !== html.NS.HTML);
         this.shortenToLength(targetIdx < 0 ? 0 : targetIdx);
     }
     shortenToLength(idx) {
@@ -4184,10 +4184,10 @@ class OpenElementStack {
         this.shortenToLength(idx < 0 ? 0 : idx);
     }
     popUntilNumberedHeaderPopped() {
-        this.popUntilPopped(NAMED_HEADERS, html$1.NS.HTML);
+        this.popUntilPopped(NAMED_HEADERS, html.NS.HTML);
     }
     popUntilTableCellPopped() {
-        this.popUntilPopped(TABLE_CELLS, html$1.NS.HTML);
+        this.popUntilPopped(TABLE_CELLS, html.NS.HTML);
     }
     popAllUpToHtmlElement() {
         //NOTE: here we assume that the root <html> element is always first in the open element stack, so
@@ -4208,13 +4208,13 @@ class OpenElementStack {
         this.shortenToLength(idx + 1);
     }
     clearBackToTableContext() {
-        this.clearBackTo(TABLE_CONTEXT, html$1.NS.HTML);
+        this.clearBackTo(TABLE_CONTEXT, html.NS.HTML);
     }
     clearBackToTableBodyContext() {
-        this.clearBackTo(TABLE_BODY_CONTEXT, html$1.NS.HTML);
+        this.clearBackTo(TABLE_BODY_CONTEXT, html.NS.HTML);
     }
     clearBackToTableRowContext() {
-        this.clearBackTo(TABLE_ROW_CONTEXT, html$1.NS.HTML);
+        this.clearBackTo(TABLE_ROW_CONTEXT, html.NS.HTML);
     }
     remove(element) {
         const idx = this._indexOf(element);
@@ -4234,7 +4234,7 @@ class OpenElementStack {
     //Search
     tryPeekProperlyNestedBodyElement() {
         //Properly nested <body> element (should be second element in stack).
-        return this.stackTop >= 1 && this.tagIDs[1] === html$1.TAG_ID.BODY ? this.items[1] : null;
+        return this.stackTop >= 1 && this.tagIDs[1] === html.TAG_ID.BODY ? this.items[1] : null;
     }
     contains(element) {
         return this._indexOf(element) > -1;
@@ -4244,14 +4244,14 @@ class OpenElementStack {
         return elementIdx >= 0 ? this.items[elementIdx] : null;
     }
     isRootHtmlElementCurrent() {
-        return this.stackTop === 0 && this.tagIDs[0] === html$1.TAG_ID.HTML;
+        return this.stackTop === 0 && this.tagIDs[0] === html.TAG_ID.HTML;
     }
     //Element in scope
     hasInScope(tagName) {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if (tn === tagName && ns === html$1.NS.HTML) {
+            if (tn === tagName && ns === html.NS.HTML) {
                 return true;
             }
             if (SCOPING_ELEMENT_NS.get(tn) === ns) {
@@ -4264,7 +4264,7 @@ class OpenElementStack {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if ((0, html$1.isNumberedHeader)(tn) && ns === html$1.NS.HTML) {
+            if ((0, html.isNumberedHeader)(tn) && ns === html.NS.HTML) {
                 return true;
             }
             if (SCOPING_ELEMENT_NS.get(tn) === ns) {
@@ -4277,10 +4277,10 @@ class OpenElementStack {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if (tn === tagName && ns === html$1.NS.HTML) {
+            if (tn === tagName && ns === html.NS.HTML) {
                 return true;
             }
-            if (((tn === html$1.TAG_ID.UL || tn === html$1.TAG_ID.OL) && ns === html$1.NS.HTML) || SCOPING_ELEMENT_NS.get(tn) === ns) {
+            if (((tn === html.TAG_ID.UL || tn === html.TAG_ID.OL) && ns === html.NS.HTML) || SCOPING_ELEMENT_NS.get(tn) === ns) {
                 return false;
             }
         }
@@ -4290,10 +4290,10 @@ class OpenElementStack {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if (tn === tagName && ns === html$1.NS.HTML) {
+            if (tn === tagName && ns === html.NS.HTML) {
                 return true;
             }
-            if ((tn === html$1.TAG_ID.BUTTON && ns === html$1.NS.HTML) || SCOPING_ELEMENT_NS.get(tn) === ns) {
+            if ((tn === html.TAG_ID.BUTTON && ns === html.NS.HTML) || SCOPING_ELEMENT_NS.get(tn) === ns) {
                 return false;
             }
         }
@@ -4303,13 +4303,13 @@ class OpenElementStack {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if (ns !== html$1.NS.HTML) {
+            if (ns !== html.NS.HTML) {
                 continue;
             }
             if (tn === tagName) {
                 return true;
             }
-            if (tn === html$1.TAG_ID.TABLE || tn === html$1.TAG_ID.TEMPLATE || tn === html$1.TAG_ID.HTML) {
+            if (tn === html.TAG_ID.TABLE || tn === html.TAG_ID.TEMPLATE || tn === html.TAG_ID.HTML) {
                 return false;
             }
         }
@@ -4319,13 +4319,13 @@ class OpenElementStack {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if (ns !== html$1.NS.HTML) {
+            if (ns !== html.NS.HTML) {
                 continue;
             }
-            if (tn === html$1.TAG_ID.TBODY || tn === html$1.TAG_ID.THEAD || tn === html$1.TAG_ID.TFOOT) {
+            if (tn === html.TAG_ID.TBODY || tn === html.TAG_ID.THEAD || tn === html.TAG_ID.TFOOT) {
                 return true;
             }
-            if (tn === html$1.TAG_ID.TABLE || tn === html$1.TAG_ID.HTML) {
+            if (tn === html.TAG_ID.TABLE || tn === html.TAG_ID.HTML) {
                 return false;
             }
         }
@@ -4335,13 +4335,13 @@ class OpenElementStack {
         for (let i = this.stackTop; i >= 0; i--) {
             const tn = this.tagIDs[i];
             const ns = this.treeAdapter.getNamespaceURI(this.items[i]);
-            if (ns !== html$1.NS.HTML) {
+            if (ns !== html.NS.HTML) {
                 continue;
             }
             if (tn === tagName) {
                 return true;
             }
-            if (tn !== html$1.TAG_ID.OPTION && tn !== html$1.TAG_ID.OPTGROUP) {
+            if (tn !== html.TAG_ID.OPTION && tn !== html.TAG_ID.OPTGROUP) {
                 return false;
             }
         }
@@ -4509,7 +4509,7 @@ exports.defaultTreeAdapter = {
     createDocument() {
         return {
             nodeName: NodeType.Document,
-            mode: html$1.DOCUMENT_MODE.NO_QUIRKS,
+            mode: html.DOCUMENT_MODE.NO_QUIRKS,
             childNodes: [],
         };
     },
@@ -4768,29 +4768,29 @@ function isConforming(token) {
 exports.isConforming = isConforming;
 function getDocumentMode(token) {
     if (token.name !== VALID_DOCTYPE_NAME) {
-        return html$1.DOCUMENT_MODE.QUIRKS;
+        return html.DOCUMENT_MODE.QUIRKS;
     }
     const { systemId } = token;
     if (systemId && systemId.toLowerCase() === QUIRKS_MODE_SYSTEM_ID) {
-        return html$1.DOCUMENT_MODE.QUIRKS;
+        return html.DOCUMENT_MODE.QUIRKS;
     }
     let { publicId } = token;
     if (publicId !== null) {
         publicId = publicId.toLowerCase();
         if (QUIRKS_MODE_PUBLIC_IDS.has(publicId)) {
-            return html$1.DOCUMENT_MODE.QUIRKS;
+            return html.DOCUMENT_MODE.QUIRKS;
         }
         let prefixes = systemId === null ? QUIRKS_MODE_NO_SYSTEM_ID_PUBLIC_ID_PREFIXES : QUIRKS_MODE_PUBLIC_ID_PREFIXES;
         if (hasPrefix(publicId, prefixes)) {
-            return html$1.DOCUMENT_MODE.QUIRKS;
+            return html.DOCUMENT_MODE.QUIRKS;
         }
         prefixes =
             systemId === null ? LIMITED_QUIRKS_PUBLIC_ID_PREFIXES : LIMITED_QUIRKS_WITH_SYSTEM_ID_PUBLIC_ID_PREFIXES;
         if (hasPrefix(publicId, prefixes)) {
-            return html$1.DOCUMENT_MODE.LIMITED_QUIRKS;
+            return html.DOCUMENT_MODE.LIMITED_QUIRKS;
         }
     }
-    return html$1.DOCUMENT_MODE.NO_QUIRKS;
+    return html.DOCUMENT_MODE.NO_QUIRKS;
 }
 exports.getDocumentMode = getDocumentMode;
 
@@ -4869,18 +4869,18 @@ const SVG_ATTRS_ADJUSTMENT_MAP = new Map([
     'zoomAndPan',
 ].map((attr) => [attr.toLowerCase(), attr]));
 const XML_ATTRS_ADJUSTMENT_MAP = new Map([
-    ['xlink:actuate', { prefix: 'xlink', name: 'actuate', namespace: html$1.NS.XLINK }],
-    ['xlink:arcrole', { prefix: 'xlink', name: 'arcrole', namespace: html$1.NS.XLINK }],
-    ['xlink:href', { prefix: 'xlink', name: 'href', namespace: html$1.NS.XLINK }],
-    ['xlink:role', { prefix: 'xlink', name: 'role', namespace: html$1.NS.XLINK }],
-    ['xlink:show', { prefix: 'xlink', name: 'show', namespace: html$1.NS.XLINK }],
-    ['xlink:title', { prefix: 'xlink', name: 'title', namespace: html$1.NS.XLINK }],
-    ['xlink:type', { prefix: 'xlink', name: 'type', namespace: html$1.NS.XLINK }],
-    ['xml:base', { prefix: 'xml', name: 'base', namespace: html$1.NS.XML }],
-    ['xml:lang', { prefix: 'xml', name: 'lang', namespace: html$1.NS.XML }],
-    ['xml:space', { prefix: 'xml', name: 'space', namespace: html$1.NS.XML }],
-    ['xmlns', { prefix: '', name: 'xmlns', namespace: html$1.NS.XMLNS }],
-    ['xmlns:xlink', { prefix: 'xmlns', name: 'xlink', namespace: html$1.NS.XMLNS }],
+    ['xlink:actuate', { prefix: 'xlink', name: 'actuate', namespace: html.NS.XLINK }],
+    ['xlink:arcrole', { prefix: 'xlink', name: 'arcrole', namespace: html.NS.XLINK }],
+    ['xlink:href', { prefix: 'xlink', name: 'href', namespace: html.NS.XLINK }],
+    ['xlink:role', { prefix: 'xlink', name: 'role', namespace: html.NS.XLINK }],
+    ['xlink:show', { prefix: 'xlink', name: 'show', namespace: html.NS.XLINK }],
+    ['xlink:title', { prefix: 'xlink', name: 'title', namespace: html.NS.XLINK }],
+    ['xlink:type', { prefix: 'xlink', name: 'type', namespace: html.NS.XLINK }],
+    ['xml:base', { prefix: 'xml', name: 'base', namespace: html.NS.XML }],
+    ['xml:lang', { prefix: 'xml', name: 'lang', namespace: html.NS.XML }],
+    ['xml:space', { prefix: 'xml', name: 'space', namespace: html.NS.XML }],
+    ['xmlns', { prefix: '', name: 'xmlns', namespace: html.NS.XMLNS }],
+    ['xmlns:xlink', { prefix: 'xmlns', name: 'xlink', namespace: html.NS.XMLNS }],
 ]);
 //SVG tag names adjustment map
 exports.SVG_TAG_NAMES_ADJUSTMENT_MAP = new Map([
@@ -4923,56 +4923,56 @@ exports.SVG_TAG_NAMES_ADJUSTMENT_MAP = new Map([
 ].map((tn) => [tn.toLowerCase(), tn]));
 //Tags that causes exit from foreign content
 const EXITS_FOREIGN_CONTENT = new Set([
-    html$1.TAG_ID.B,
-    html$1.TAG_ID.BIG,
-    html$1.TAG_ID.BLOCKQUOTE,
-    html$1.TAG_ID.BODY,
-    html$1.TAG_ID.BR,
-    html$1.TAG_ID.CENTER,
-    html$1.TAG_ID.CODE,
-    html$1.TAG_ID.DD,
-    html$1.TAG_ID.DIV,
-    html$1.TAG_ID.DL,
-    html$1.TAG_ID.DT,
-    html$1.TAG_ID.EM,
-    html$1.TAG_ID.EMBED,
-    html$1.TAG_ID.H1,
-    html$1.TAG_ID.H2,
-    html$1.TAG_ID.H3,
-    html$1.TAG_ID.H4,
-    html$1.TAG_ID.H5,
-    html$1.TAG_ID.H6,
-    html$1.TAG_ID.HEAD,
-    html$1.TAG_ID.HR,
-    html$1.TAG_ID.I,
-    html$1.TAG_ID.IMG,
-    html$1.TAG_ID.LI,
-    html$1.TAG_ID.LISTING,
-    html$1.TAG_ID.MENU,
-    html$1.TAG_ID.META,
-    html$1.TAG_ID.NOBR,
-    html$1.TAG_ID.OL,
-    html$1.TAG_ID.P,
-    html$1.TAG_ID.PRE,
-    html$1.TAG_ID.RUBY,
-    html$1.TAG_ID.S,
-    html$1.TAG_ID.SMALL,
-    html$1.TAG_ID.SPAN,
-    html$1.TAG_ID.STRONG,
-    html$1.TAG_ID.STRIKE,
-    html$1.TAG_ID.SUB,
-    html$1.TAG_ID.SUP,
-    html$1.TAG_ID.TABLE,
-    html$1.TAG_ID.TT,
-    html$1.TAG_ID.U,
-    html$1.TAG_ID.UL,
-    html$1.TAG_ID.VAR,
+    html.TAG_ID.B,
+    html.TAG_ID.BIG,
+    html.TAG_ID.BLOCKQUOTE,
+    html.TAG_ID.BODY,
+    html.TAG_ID.BR,
+    html.TAG_ID.CENTER,
+    html.TAG_ID.CODE,
+    html.TAG_ID.DD,
+    html.TAG_ID.DIV,
+    html.TAG_ID.DL,
+    html.TAG_ID.DT,
+    html.TAG_ID.EM,
+    html.TAG_ID.EMBED,
+    html.TAG_ID.H1,
+    html.TAG_ID.H2,
+    html.TAG_ID.H3,
+    html.TAG_ID.H4,
+    html.TAG_ID.H5,
+    html.TAG_ID.H6,
+    html.TAG_ID.HEAD,
+    html.TAG_ID.HR,
+    html.TAG_ID.I,
+    html.TAG_ID.IMG,
+    html.TAG_ID.LI,
+    html.TAG_ID.LISTING,
+    html.TAG_ID.MENU,
+    html.TAG_ID.META,
+    html.TAG_ID.NOBR,
+    html.TAG_ID.OL,
+    html.TAG_ID.P,
+    html.TAG_ID.PRE,
+    html.TAG_ID.RUBY,
+    html.TAG_ID.S,
+    html.TAG_ID.SMALL,
+    html.TAG_ID.SPAN,
+    html.TAG_ID.STRONG,
+    html.TAG_ID.STRIKE,
+    html.TAG_ID.SUB,
+    html.TAG_ID.SUP,
+    html.TAG_ID.TABLE,
+    html.TAG_ID.TT,
+    html.TAG_ID.U,
+    html.TAG_ID.UL,
+    html.TAG_ID.VAR,
 ]);
 //Check exit from foreign content
 function causesExit(startTagToken) {
     const tn = startTagToken.tagID;
-    const isFontWithAttrs = tn === html$1.TAG_ID.FONT &&
-        startTagToken.attrs.some(({ name }) => name === html$1.ATTRS.COLOR || name === html$1.ATTRS.SIZE || name === html$1.ATTRS.FACE);
+    const isFontWithAttrs = tn === html.TAG_ID.FONT &&
+        startTagToken.attrs.some(({ name }) => name === html.ATTRS.COLOR || name === html.ATTRS.SIZE || name === html.ATTRS.FACE);
     return isFontWithAttrs || EXITS_FOREIGN_CONTENT.has(tn);
 }
 exports.causesExit = causesExit;
@@ -5010,28 +5010,28 @@ function adjustTokenSVGTagName(token) {
     const adjustedTagName = exports.SVG_TAG_NAMES_ADJUSTMENT_MAP.get(token.tagName);
     if (adjustedTagName != null) {
         token.tagName = adjustedTagName;
-        token.tagID = (0, html$1.getTagID)(token.tagName);
+        token.tagID = (0, html.getTagID)(token.tagName);
     }
 }
 exports.adjustTokenSVGTagName = adjustTokenSVGTagName;
 //Integration points
 function isMathMLTextIntegrationPoint(tn, ns) {
-    return ns === html$1.NS.MATHML && (tn === html$1.TAG_ID.MI || tn === html$1.TAG_ID.MO || tn === html$1.TAG_ID.MN || tn === html$1.TAG_ID.MS || tn === html$1.TAG_ID.MTEXT);
+    return ns === html.NS.MATHML && (tn === html.TAG_ID.MI || tn === html.TAG_ID.MO || tn === html.TAG_ID.MN || tn === html.TAG_ID.MS || tn === html.TAG_ID.MTEXT);
 }
 function isHtmlIntegrationPoint(tn, ns, attrs) {
-    if (ns === html$1.NS.MATHML && tn === html$1.TAG_ID.ANNOTATION_XML) {
+    if (ns === html.NS.MATHML && tn === html.TAG_ID.ANNOTATION_XML) {
         for (let i = 0; i < attrs.length; i++) {
-            if (attrs[i].name === html$1.ATTRS.ENCODING) {
+            if (attrs[i].name === html.ATTRS.ENCODING) {
                 const value = attrs[i].value.toLowerCase();
                 return value === MIME_TYPES.TEXT_HTML || value === MIME_TYPES.APPLICATION_XML;
             }
         }
     }
-    return ns === html$1.NS.SVG && (tn === html$1.TAG_ID.FOREIGN_OBJECT || tn === html$1.TAG_ID.DESC || tn === html$1.TAG_ID.TITLE);
+    return ns === html.NS.SVG && (tn === html.TAG_ID.FOREIGN_OBJECT || tn === html.TAG_ID.DESC || tn === html.TAG_ID.TITLE);
 }
 function isIntegrationPoint(tn, ns, attrs, foreignNS) {
-    return (((!foreignNS || foreignNS === html$1.NS.HTML) && isHtmlIntegrationPoint(tn, ns, attrs)) ||
-        ((!foreignNS || foreignNS === html$1.NS.MATHML) && isMathMLTextIntegrationPoint(tn, ns)));
+    return (((!foreignNS || foreignNS === html.NS.HTML) && isHtmlIntegrationPoint(tn, ns, attrs)) ||
+        ((!foreignNS || foreignNS === html.NS.MATHML) && isMathMLTextIntegrationPoint(tn, ns)));
 }
 exports.isIntegrationPoint = isIntegrationPoint;
 
@@ -5113,7 +5113,7 @@ const BASE_LOC = {
     endCol: -1,
     endOffset: -1,
 };
-const TABLE_STRUCTURE_TAGS = new Set([html$1.TAG_ID.TABLE, html$1.TAG_ID.TBODY, html$1.TAG_ID.TFOOT, html$1.TAG_ID.THEAD, html$1.TAG_ID.TR]);
+const TABLE_STRUCTURE_TAGS = new Set([html.TAG_ID.TABLE, html.TAG_ID.TBODY, html.TAG_ID.TFOOT, html.TAG_ID.THEAD, html.TAG_ID.TR]);
 const defaultParserOptions = {
     scriptingEnabled: true,
     sourceCodeLocationInfo: false,
@@ -5153,7 +5153,7 @@ class Parser {
         this.document = document !== null && document !== void 0 ? document : this.treeAdapter.createDocument();
         this.tokenizer = new tokenizer.Tokenizer(this.options, this);
         this.activeFormattingElements = new formattingElementList.FormattingElementList(this.treeAdapter);
-        this.fragmentContextID = fragmentContext ? (0, html$1.getTagID)(this.treeAdapter.getTagName(fragmentContext)) : html$1.TAG_ID.UNKNOWN;
+        this.fragmentContextID = fragmentContext ? (0, html.getTagID)(this.treeAdapter.getTagName(fragmentContext)) : html.TAG_ID.UNKNOWN;
         this._setContextModes(fragmentContext !== null && fragmentContext !== void 0 ? fragmentContext : this.document, this.fragmentContextID);
         this.openElements = new openElementStack.OpenElementStack(this.document, this.treeAdapter, this);
     }
@@ -5167,13 +5167,13 @@ class Parser {
         const opts = Object.assign(Object.assign({}, defaultParserOptions), options);
         //NOTE: use a <template> element as the fragment context if no context element was provided,
         //so we will parse in a "forgiving" manner
-        fragmentContext !== null && fragmentContext !== void 0 ? fragmentContext : (fragmentContext = opts.treeAdapter.createElement(html$1.TAG_NAMES.TEMPLATE, html$1.NS.HTML, []));
+        fragmentContext !== null && fragmentContext !== void 0 ? fragmentContext : (fragmentContext = opts.treeAdapter.createElement(html.TAG_NAMES.TEMPLATE, html.NS.HTML, []));
         //NOTE: create a fake element which will be used as the `document` for fragment parsing.
         //This is important for jsdom, where a new `document` cannot be created. This led to
         //fragment parsing messing with the main `document`.
-        const documentMock = opts.treeAdapter.createElement('documentmock', html$1.NS.HTML, []);
+        const documentMock = opts.treeAdapter.createElement('documentmock', html.NS.HTML, []);
         const parser = new this(opts, documentMock, fragmentContext);
-        if (parser.fragmentContextID === html$1.TAG_ID.TEMPLATE) {
+        if (parser.fragmentContextID === html.TAG_ID.TEMPLATE) {
             parser.tmplInsertionModeStack.unshift(InsertionMode.IN_TEMPLATE);
         }
         parser._initTokenizerForFragmentParsing();
@@ -5232,12 +5232,12 @@ class Parser {
         }
     }
     _setContextModes(current, tid) {
-        const isHTML = current === this.document || this.treeAdapter.getNamespaceURI(current) === html$1.NS.HTML;
+        const isHTML = current === this.document || this.treeAdapter.getNamespaceURI(current) === html.NS.HTML;
         this.currentNotInHTML = !isHTML;
         this.tokenizer.inForeignNode = !isHTML && !this._isIntegrationPoint(tid, current);
     }
     _switchToTextParsing(currentToken, nextTokenizerState) {
-        this._insertElement(currentToken, html$1.NS.HTML);
+        this._insertElement(currentToken, html.NS.HTML);
         this.tokenizer.state = nextTokenizerState;
         this.originalInsertionMode = this.insertionMode;
         this.insertionMode = InsertionMode.TEXT;
@@ -5256,7 +5256,7 @@ class Parser {
     _findFormInFragmentContext() {
         let node = this.fragmentContext;
         while (node) {
-            if (this.treeAdapter.getTagName(node) === html$1.TAG_NAMES.FORM) {
+            if (this.treeAdapter.getTagName(node) === html.TAG_NAMES.FORM) {
                 this.formElement = node;
                 break;
             }
@@ -5264,29 +5264,29 @@ class Parser {
         }
     }
     _initTokenizerForFragmentParsing() {
-        if (!this.fragmentContext || this.treeAdapter.getNamespaceURI(this.fragmentContext) !== html$1.NS.HTML) {
+        if (!this.fragmentContext || this.treeAdapter.getNamespaceURI(this.fragmentContext) !== html.NS.HTML) {
             return;
         }
         switch (this.fragmentContextID) {
-            case html$1.TAG_ID.TITLE:
-            case html$1.TAG_ID.TEXTAREA: {
+            case html.TAG_ID.TITLE:
+            case html.TAG_ID.TEXTAREA: {
                 this.tokenizer.state = tokenizer.TokenizerMode.RCDATA;
                 break;
             }
-            case html$1.TAG_ID.STYLE:
-            case html$1.TAG_ID.XMP:
-            case html$1.TAG_ID.IFRAME:
-            case html$1.TAG_ID.NOEMBED:
-            case html$1.TAG_ID.NOFRAMES:
-            case html$1.TAG_ID.NOSCRIPT: {
+            case html.TAG_ID.STYLE:
+            case html.TAG_ID.XMP:
+            case html.TAG_ID.IFRAME:
+            case html.TAG_ID.NOEMBED:
+            case html.TAG_ID.NOFRAMES:
+            case html.TAG_ID.NOSCRIPT: {
                 this.tokenizer.state = tokenizer.TokenizerMode.RAWTEXT;
                 break;
             }
-            case html$1.TAG_ID.SCRIPT: {
+            case html.TAG_ID.SCRIPT: {
                 this.tokenizer.state = tokenizer.TokenizerMode.SCRIPT_DATA;
                 break;
             }
-            case html$1.TAG_ID.PLAINTEXT: {
+            case html.TAG_ID.PLAINTEXT: {
                 this.tokenizer.state = tokenizer.TokenizerMode.PLAINTEXT;
                 break;
             }
@@ -5330,12 +5330,12 @@ class Parser {
         this.openElements.push(element, token.tagID);
     }
     _insertFakeElement(tagName, tagID) {
-        const element = this.treeAdapter.createElement(tagName, html$1.NS.HTML, []);
+        const element = this.treeAdapter.createElement(tagName, html.NS.HTML, []);
         this._attachElementToTree(element, null);
         this.openElements.push(element, tagID);
     }
     _insertTemplate(token) {
-        const tmpl = this.treeAdapter.createElement(token.tagName, html$1.NS.HTML, token.attrs, token);
+        const tmpl = this.treeAdapter.createElement(token.tagName, html.NS.HTML, token.attrs, token);
         const content = this.treeAdapter.createDocumentFragment();
         this.treeAdapter.setTemplateContent(tmpl, content);
         this._attachElementToTree(tmpl, token.location);
@@ -5344,11 +5344,11 @@ class Parser {
             this.treeAdapter.setNodeSourceCodeLocation(content, null);
     }
     _insertFakeRootElement() {
-        const element = this.treeAdapter.createElement(html$1.TAG_NAMES.HTML, html$1.NS.HTML, []);
+        const element = this.treeAdapter.createElement(html.TAG_NAMES.HTML, html.NS.HTML, []);
         if (this.options.sourceCodeLocationInfo)
             this.treeAdapter.setNodeSourceCodeLocation(element, null);
         this.treeAdapter.appendChild(this.openElements.current, element);
-        this.openElements.push(element, html$1.TAG_ID.HTML);
+        this.openElements.push(element, html.TAG_ID.HTML);
     }
     _appendCommentNode(token, parent) {
         const commentNode = this.treeAdapter.createCommentNode(token.data);
@@ -5430,9 +5430,9 @@ class Parser {
         else {
             ({ current, currentTagId } = this.openElements);
         }
-        if (token.tagID === html$1.TAG_ID.SVG &&
-            this.treeAdapter.getTagName(current) === html$1.TAG_NAMES.ANNOTATION_XML &&
-            this.treeAdapter.getNamespaceURI(current) === html$1.NS.MATHML) {
+        if (token.tagID === html.TAG_ID.SVG &&
+            this.treeAdapter.getTagName(current) === html.TAG_NAMES.ANNOTATION_XML &&
+            this.treeAdapter.getNamespaceURI(current) === html.NS.MATHML) {
             return false;
         }
         return (
@@ -5440,8 +5440,8 @@ class Parser {
         this.tokenizer.inForeignNode ||
             // If it _is_ an integration point, then we might have to check that it is not an HTML
             // integration point.
-            ((token.tagID === html$1.TAG_ID.MGLYPH || token.tagID === html$1.TAG_ID.MALIGNMARK) &&
-                !this._isIntegrationPoint(currentTagId, current, html$1.NS.HTML)));
+            ((token.tagID === html.TAG_ID.MGLYPH || token.tagID === html.TAG_ID.MALIGNMARK) &&
+                !this._isIntegrationPoint(currentTagId, current, html.NS.HTML)));
     }
     _processToken(token$1) {
         switch (token$1.type) {
@@ -5506,54 +5506,54 @@ class Parser {
         this.insertionMode = InsertionMode.IN_ROW;
     }
     _closePElement() {
-        this.openElements.generateImpliedEndTagsWithExclusion(html$1.TAG_ID.P);
-        this.openElements.popUntilTagNamePopped(html$1.TAG_ID.P);
+        this.openElements.generateImpliedEndTagsWithExclusion(html.TAG_ID.P);
+        this.openElements.popUntilTagNamePopped(html.TAG_ID.P);
     }
     //Insertion modes
     _resetInsertionMode() {
         for (let i = this.openElements.stackTop; i >= 0; i--) {
             //Insertion mode reset map
             switch (i === 0 && this.fragmentContext ? this.fragmentContextID : this.openElements.tagIDs[i]) {
-                case html$1.TAG_ID.TR:
+                case html.TAG_ID.TR:
                     this.insertionMode = InsertionMode.IN_ROW;
                     return;
-                case html$1.TAG_ID.TBODY:
-                case html$1.TAG_ID.THEAD:
-                case html$1.TAG_ID.TFOOT:
+                case html.TAG_ID.TBODY:
+                case html.TAG_ID.THEAD:
+                case html.TAG_ID.TFOOT:
                     this.insertionMode = InsertionMode.IN_TABLE_BODY;
                     return;
-                case html$1.TAG_ID.CAPTION:
+                case html.TAG_ID.CAPTION:
                     this.insertionMode = InsertionMode.IN_CAPTION;
                     return;
-                case html$1.TAG_ID.COLGROUP:
+                case html.TAG_ID.COLGROUP:
                     this.insertionMode = InsertionMode.IN_COLUMN_GROUP;
                     return;
-                case html$1.TAG_ID.TABLE:
+                case html.TAG_ID.TABLE:
                     this.insertionMode = InsertionMode.IN_TABLE;
                     return;
-                case html$1.TAG_ID.BODY:
+                case html.TAG_ID.BODY:
                     this.insertionMode = InsertionMode.IN_BODY;
                     return;
-                case html$1.TAG_ID.FRAMESET:
+                case html.TAG_ID.FRAMESET:
                     this.insertionMode = InsertionMode.IN_FRAMESET;
                     return;
-                case html$1.TAG_ID.SELECT:
+                case html.TAG_ID.SELECT:
                     this._resetInsertionModeForSelect(i);
                     return;
-                case html$1.TAG_ID.TEMPLATE:
+                case html.TAG_ID.TEMPLATE:
                     this.insertionMode = this.tmplInsertionModeStack[0];
                     return;
-                case html$1.TAG_ID.HTML:
+                case html.TAG_ID.HTML:
                     this.insertionMode = this.headElement ? InsertionMode.AFTER_HEAD : InsertionMode.BEFORE_HEAD;
                     return;
-                case html$1.TAG_ID.TD:
-                case html$1.TAG_ID.TH:
+                case html.TAG_ID.TD:
+                case html.TAG_ID.TH:
                     if (i > 0) {
                         this.insertionMode = InsertionMode.IN_CELL;
                         return;
                     }
                     break;
-                case html$1.TAG_ID.HEAD:
+                case html.TAG_ID.HEAD:
                     if (i > 0) {
                         this.insertionMode = InsertionMode.IN_HEAD;
                         return;
@@ -5567,10 +5567,10 @@ class Parser {
         if (selectIdx > 0) {
             for (let i = selectIdx - 1; i > 0; i--) {
                 const tn = this.openElements.tagIDs[i];
-                if (tn === html$1.TAG_ID.TEMPLATE) {
+                if (tn === html.TAG_ID.TEMPLATE) {
                     break;
                 }
-                else if (tn === html$1.TAG_ID.TABLE) {
+                else if (tn === html.TAG_ID.TABLE) {
                     this.insertionMode = InsertionMode.IN_SELECT_IN_TABLE;
                     return;
                 }
@@ -5589,12 +5589,12 @@ class Parser {
         for (let i = this.openElements.stackTop; i >= 0; i--) {
             const openElement = this.openElements.items[i];
             switch (this.openElements.tagIDs[i]) {
-                case html$1.TAG_ID.TEMPLATE:
-                    if (this.treeAdapter.getNamespaceURI(openElement) === html$1.NS.HTML) {
+                case html.TAG_ID.TEMPLATE:
+                    if (this.treeAdapter.getNamespaceURI(openElement) === html.NS.HTML) {
                         return { parent: this.treeAdapter.getTemplateContent(openElement), beforeElement: null };
                     }
                     break;
-                case html$1.TAG_ID.TABLE: {
+                case html.TAG_ID.TABLE: {
                     const parent = this.treeAdapter.getParentNode(openElement);
                     if (parent) {
                         return { parent, beforeElement: openElement };
@@ -5618,7 +5618,7 @@ class Parser {
     //Special elements
     _isSpecialElement(element, id) {
         const ns = this.treeAdapter.getNamespaceURI(element);
-        return html$1.SPECIAL_ELEMENTS[ns].has(id);
+        return html.SPECIAL_ELEMENTS[ns].has(id);
     }
     onCharacter(token) {
         this.skipNextNewLine = false;
@@ -6133,13 +6133,13 @@ function aaRecreateElementFromEntry(p, elementEntry) {
 //Step 14 of the algorithm
 function aaInsertLastNodeInCommonAncestor(p, commonAncestor, lastElement) {
     const tn = p.treeAdapter.getTagName(commonAncestor);
-    const tid = (0, html$1.getTagID)(tn);
+    const tid = (0, html.getTagID)(tn);
     if (p._isElementCausesFosterParenting(tid)) {
         p._fosterParentElement(lastElement);
     }
     else {
         const ns = p.treeAdapter.getNamespaceURI(commonAncestor);
-        if (tid === html$1.TAG_ID.TEMPLATE && ns === html$1.NS.HTML) {
+        if (tid === html.TAG_ID.TEMPLATE && ns === html.NS.HTML) {
             commonAncestor = p.treeAdapter.getTemplateContent(commonAncestor);
         }
         p.treeAdapter.appendChild(commonAncestor, lastElement);
@@ -6219,7 +6219,7 @@ function stopParsing(p, token) {
 //------------------------------------------------------------------
 function doctypeInInitialMode(p, token) {
     p._setDocumentType(token);
-    const mode = token.forceQuirks ? html$1.DOCUMENT_MODE.QUIRKS : doctype$1.getDocumentMode(token);
+    const mode = token.forceQuirks ? html.DOCUMENT_MODE.QUIRKS : doctype$1.getDocumentMode(token);
     if (!doctype$1.isConforming(token)) {
         p._err(token, errorCodes.ERR.nonConformingDoctype);
     }
@@ -6228,15 +6228,15 @@ function doctypeInInitialMode(p, token) {
 }
 function tokenInInitialMode(p, token) {
     p._err(token, errorCodes.ERR.missingDoctype, true);
-    p.treeAdapter.setDocumentMode(p.document, html$1.DOCUMENT_MODE.QUIRKS);
+    p.treeAdapter.setDocumentMode(p.document, html.DOCUMENT_MODE.QUIRKS);
     p.insertionMode = InsertionMode.BEFORE_HTML;
     p._processToken(token);
 }
 // The "before html" insertion mode
 //------------------------------------------------------------------
 function startTagBeforeHtml(p, token) {
-    if (token.tagID === html$1.TAG_ID.HTML) {
-        p._insertElement(token, html$1.NS.HTML);
+    if (token.tagID === html.TAG_ID.HTML) {
+        p._insertElement(token, html.NS.HTML);
         p.insertionMode = InsertionMode.BEFORE_HEAD;
     }
     else {
@@ -6245,7 +6245,7 @@ function startTagBeforeHtml(p, token) {
 }
 function endTagBeforeHtml(p, token) {
     const tn = token.tagID;
-    if (tn === html$1.TAG_ID.HTML || tn === html$1.TAG_ID.HEAD || tn === html$1.TAG_ID.BODY || tn === html$1.TAG_ID.BR) {
+    if (tn === html.TAG_ID.HTML || tn === html.TAG_ID.HEAD || tn === html.TAG_ID.BODY || tn === html.TAG_ID.BR) {
         tokenBeforeHtml(p, token);
     }
 }
@@ -6258,12 +6258,12 @@ function tokenBeforeHtml(p, token) {
 //------------------------------------------------------------------
 function startTagBeforeHead(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.HEAD: {
-            p._insertElement(token, html$1.NS.HTML);
+        case html.TAG_ID.HEAD: {
+            p._insertElement(token, html.NS.HTML);
             p.headElement = p.openElements.current;
             p.insertionMode = InsertionMode.IN_HEAD;
             break;
@@ -6275,7 +6275,7 @@ function startTagBeforeHead(p, token) {
 }
 function endTagBeforeHead(p, token) {
     const tn = token.tagID;
-    if (tn === html$1.TAG_ID.HEAD || tn === html$1.TAG_ID.BODY || tn === html$1.TAG_ID.HTML || tn === html$1.TAG_ID.BR) {
+    if (tn === html.TAG_ID.HEAD || tn === html.TAG_ID.BODY || tn === html.TAG_ID.HTML || tn === html.TAG_ID.BR) {
         tokenBeforeHead(p, token);
     }
     else {
@@ -6283,7 +6283,7 @@ function endTagBeforeHead(p, token) {
     }
 }
 function tokenBeforeHead(p, token) {
-    p._insertFakeElement(html$1.TAG_NAMES.HEAD, html$1.TAG_ID.HEAD);
+    p._insertFakeElement(html.TAG_NAMES.HEAD, html.TAG_ID.HEAD);
     p.headElement = p.openElements.current;
     p.insertionMode = InsertionMode.IN_HEAD;
     p._processToken(token);
@@ -6292,43 +6292,43 @@ function tokenBeforeHead(p, token) {
 //------------------------------------------------------------------
 function startTagInHead(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.BASE:
-        case html$1.TAG_ID.BASEFONT:
-        case html$1.TAG_ID.BGSOUND:
-        case html$1.TAG_ID.LINK:
-        case html$1.TAG_ID.META: {
-            p._appendElement(token, html$1.NS.HTML);
+        case html.TAG_ID.BASE:
+        case html.TAG_ID.BASEFONT:
+        case html.TAG_ID.BGSOUND:
+        case html.TAG_ID.LINK:
+        case html.TAG_ID.META: {
+            p._appendElement(token, html.NS.HTML);
             token.ackSelfClosing = true;
             break;
         }
-        case html$1.TAG_ID.TITLE: {
+        case html.TAG_ID.TITLE: {
             p._switchToTextParsing(token, tokenizer.TokenizerMode.RCDATA);
             break;
         }
-        case html$1.TAG_ID.NOSCRIPT: {
+        case html.TAG_ID.NOSCRIPT: {
             if (p.options.scriptingEnabled) {
                 p._switchToTextParsing(token, tokenizer.TokenizerMode.RAWTEXT);
             }
             else {
-                p._insertElement(token, html$1.NS.HTML);
+                p._insertElement(token, html.NS.HTML);
                 p.insertionMode = InsertionMode.IN_HEAD_NO_SCRIPT;
             }
             break;
         }
-        case html$1.TAG_ID.NOFRAMES:
-        case html$1.TAG_ID.STYLE: {
+        case html.TAG_ID.NOFRAMES:
+        case html.TAG_ID.STYLE: {
             p._switchToTextParsing(token, tokenizer.TokenizerMode.RAWTEXT);
             break;
         }
-        case html$1.TAG_ID.SCRIPT: {
+        case html.TAG_ID.SCRIPT: {
             p._switchToTextParsing(token, tokenizer.TokenizerMode.SCRIPT_DATA);
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             p._insertTemplate(token);
             p.activeFormattingElements.insertMarker();
             p.framesetOk = false;
@@ -6336,7 +6336,7 @@ function startTagInHead(p, token) {
             p.tmplInsertionModeStack.unshift(InsertionMode.IN_TEMPLATE);
             break;
         }
-        case html$1.TAG_ID.HEAD: {
+        case html.TAG_ID.HEAD: {
             p._err(token, errorCodes.ERR.misplacedStartTagForHeadElement);
             break;
         }
@@ -6347,18 +6347,18 @@ function startTagInHead(p, token) {
 }
 function endTagInHead(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HEAD: {
+        case html.TAG_ID.HEAD: {
             p.openElements.pop();
             p.insertionMode = InsertionMode.AFTER_HEAD;
             break;
         }
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.BR:
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.BR:
+        case html.TAG_ID.HTML: {
             tokenInHead(p, token);
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             templateEndTagInHead(p, token);
             break;
         }
@@ -6370,10 +6370,10 @@ function endTagInHead(p, token) {
 function templateEndTagInHead(p, token) {
     if (p.openElements.tmplCount > 0) {
         p.openElements.generateImpliedEndTagsThoroughly();
-        if (p.openElements.currentTagId !== html$1.TAG_ID.TEMPLATE) {
+        if (p.openElements.currentTagId !== html.TAG_ID.TEMPLATE) {
             p._err(token, errorCodes.ERR.closingOfElementWithOpenChildElements);
         }
-        p.openElements.popUntilTagNamePopped(html$1.TAG_ID.TEMPLATE);
+        p.openElements.popUntilTagNamePopped(html.TAG_ID.TEMPLATE);
         p.activeFormattingElements.clearToLastMarker();
         p.tmplInsertionModeStack.shift();
         p._resetInsertionMode();
@@ -6391,21 +6391,21 @@ function tokenInHead(p, token) {
 //------------------------------------------------------------------
 function startTagInHeadNoScript(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.BASEFONT:
-        case html$1.TAG_ID.BGSOUND:
-        case html$1.TAG_ID.HEAD:
-        case html$1.TAG_ID.LINK:
-        case html$1.TAG_ID.META:
-        case html$1.TAG_ID.NOFRAMES:
-        case html$1.TAG_ID.STYLE: {
+        case html.TAG_ID.BASEFONT:
+        case html.TAG_ID.BGSOUND:
+        case html.TAG_ID.HEAD:
+        case html.TAG_ID.LINK:
+        case html.TAG_ID.META:
+        case html.TAG_ID.NOFRAMES:
+        case html.TAG_ID.STYLE: {
             startTagInHead(p, token);
             break;
         }
-        case html$1.TAG_ID.NOSCRIPT: {
+        case html.TAG_ID.NOSCRIPT: {
             p._err(token, errorCodes.ERR.nestedNoscriptInHead);
             break;
         }
@@ -6416,12 +6416,12 @@ function startTagInHeadNoScript(p, token) {
 }
 function endTagInHeadNoScript(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.NOSCRIPT: {
+        case html.TAG_ID.NOSCRIPT: {
             p.openElements.pop();
             p.insertionMode = InsertionMode.IN_HEAD;
             break;
         }
-        case html$1.TAG_ID.BR: {
+        case html.TAG_ID.BR: {
             tokenInHeadNoScript(p, token);
             break;
         }
@@ -6441,38 +6441,38 @@ function tokenInHeadNoScript(p, token$1) {
 //------------------------------------------------------------------
 function startTagAfterHead(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.BODY: {
-            p._insertElement(token, html$1.NS.HTML);
+        case html.TAG_ID.BODY: {
+            p._insertElement(token, html.NS.HTML);
             p.framesetOk = false;
             p.insertionMode = InsertionMode.IN_BODY;
             break;
         }
-        case html$1.TAG_ID.FRAMESET: {
-            p._insertElement(token, html$1.NS.HTML);
+        case html.TAG_ID.FRAMESET: {
+            p._insertElement(token, html.NS.HTML);
             p.insertionMode = InsertionMode.IN_FRAMESET;
             break;
         }
-        case html$1.TAG_ID.BASE:
-        case html$1.TAG_ID.BASEFONT:
-        case html$1.TAG_ID.BGSOUND:
-        case html$1.TAG_ID.LINK:
-        case html$1.TAG_ID.META:
-        case html$1.TAG_ID.NOFRAMES:
-        case html$1.TAG_ID.SCRIPT:
-        case html$1.TAG_ID.STYLE:
-        case html$1.TAG_ID.TEMPLATE:
-        case html$1.TAG_ID.TITLE: {
+        case html.TAG_ID.BASE:
+        case html.TAG_ID.BASEFONT:
+        case html.TAG_ID.BGSOUND:
+        case html.TAG_ID.LINK:
+        case html.TAG_ID.META:
+        case html.TAG_ID.NOFRAMES:
+        case html.TAG_ID.SCRIPT:
+        case html.TAG_ID.STYLE:
+        case html.TAG_ID.TEMPLATE:
+        case html.TAG_ID.TITLE: {
             p._err(token, errorCodes.ERR.abandonedHeadElementChild);
-            p.openElements.push(p.headElement, html$1.TAG_ID.HEAD);
+            p.openElements.push(p.headElement, html.TAG_ID.HEAD);
             startTagInHead(p, token);
             p.openElements.remove(p.headElement);
             break;
         }
-        case html$1.TAG_ID.HEAD: {
+        case html.TAG_ID.HEAD: {
             p._err(token, errorCodes.ERR.misplacedStartTagForHeadElement);
             break;
         }
@@ -6483,13 +6483,13 @@ function startTagAfterHead(p, token) {
 }
 function endTagAfterHead(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.HTML:
-        case html$1.TAG_ID.BR: {
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.HTML:
+        case html.TAG_ID.BR: {
             tokenAfterHead(p, token);
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             templateEndTagInHead(p, token);
             break;
         }
@@ -6499,7 +6499,7 @@ function endTagAfterHead(p, token) {
     }
 }
 function tokenAfterHead(p, token) {
-    p._insertFakeElement(html$1.TAG_NAMES.BODY, html$1.TAG_ID.BODY);
+    p._insertFakeElement(html.TAG_NAMES.BODY, html.TAG_ID.BODY);
     p.insertionMode = InsertionMode.IN_BODY;
     modeInBody(p, token);
 }
@@ -6560,30 +6560,30 @@ function framesetStartTagInBody(p, token) {
     if (p.framesetOk && bodyElement) {
         p.treeAdapter.detachNode(bodyElement);
         p.openElements.popAllUpToHtmlElement();
-        p._insertElement(token, html$1.NS.HTML);
+        p._insertElement(token, html.NS.HTML);
         p.insertionMode = InsertionMode.IN_FRAMESET;
     }
 }
 function addressStartTagInBody(p, token) {
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function numberedHeaderStartTagInBody(p, token) {
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    if ((0, html$1.isNumberedHeader)(p.openElements.currentTagId)) {
+    if ((0, html.isNumberedHeader)(p.openElements.currentTagId)) {
         p.openElements.pop();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function preStartTagInBody(p, token) {
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     //NOTE: If the next token is a U+000A LINE FEED (LF) character token, then ignore that token and move
     //on to the next one. (Newlines at the start of pre blocks are ignored as an authoring convenience.)
     p.skipNextNewLine = true;
@@ -6592,10 +6592,10 @@ function preStartTagInBody(p, token) {
 function formStartTagInBody(p, token) {
     const inTemplate = p.openElements.tmplCount > 0;
     if (!p.formElement || inTemplate) {
-        if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+        if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
             p._closePElement();
         }
-        p._insertElement(token, html$1.NS.HTML);
+        p._insertElement(token, html.NS.HTML);
         if (!inTemplate) {
             p.formElement = p.openElements.current;
         }
@@ -6606,106 +6606,106 @@ function listItemStartTagInBody(p, token) {
     const tn = token.tagID;
     for (let i = p.openElements.stackTop; i >= 0; i--) {
         const elementId = p.openElements.tagIDs[i];
-        if ((tn === html$1.TAG_ID.LI && elementId === html$1.TAG_ID.LI) ||
-            ((tn === html$1.TAG_ID.DD || tn === html$1.TAG_ID.DT) && (elementId === html$1.TAG_ID.DD || elementId === html$1.TAG_ID.DT))) {
+        if ((tn === html.TAG_ID.LI && elementId === html.TAG_ID.LI) ||
+            ((tn === html.TAG_ID.DD || tn === html.TAG_ID.DT) && (elementId === html.TAG_ID.DD || elementId === html.TAG_ID.DT))) {
             p.openElements.generateImpliedEndTagsWithExclusion(elementId);
             p.openElements.popUntilTagNamePopped(elementId);
             break;
         }
-        if (elementId !== html$1.TAG_ID.ADDRESS &&
-            elementId !== html$1.TAG_ID.DIV &&
-            elementId !== html$1.TAG_ID.P &&
+        if (elementId !== html.TAG_ID.ADDRESS &&
+            elementId !== html.TAG_ID.DIV &&
+            elementId !== html.TAG_ID.P &&
             p._isSpecialElement(p.openElements.items[i], elementId)) {
             break;
         }
     }
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function plaintextStartTagInBody(p, token) {
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.tokenizer.state = tokenizer.TokenizerMode.PLAINTEXT;
 }
 function buttonStartTagInBody(p, token) {
-    if (p.openElements.hasInScope(html$1.TAG_ID.BUTTON)) {
+    if (p.openElements.hasInScope(html.TAG_ID.BUTTON)) {
         p.openElements.generateImpliedEndTags();
-        p.openElements.popUntilTagNamePopped(html$1.TAG_ID.BUTTON);
+        p.openElements.popUntilTagNamePopped(html.TAG_ID.BUTTON);
     }
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.framesetOk = false;
 }
 function aStartTagInBody(p, token) {
-    const activeElementEntry = p.activeFormattingElements.getElementEntryInScopeWithTagName(html$1.TAG_NAMES.A);
+    const activeElementEntry = p.activeFormattingElements.getElementEntryInScopeWithTagName(html.TAG_NAMES.A);
     if (activeElementEntry) {
         callAdoptionAgency(p, token);
         p.openElements.remove(activeElementEntry.element);
         p.activeFormattingElements.removeEntry(activeElementEntry);
     }
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.activeFormattingElements.pushElement(p.openElements.current, token);
 }
 function bStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.activeFormattingElements.pushElement(p.openElements.current, token);
 }
 function nobrStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    if (p.openElements.hasInScope(html$1.TAG_ID.NOBR)) {
+    if (p.openElements.hasInScope(html.TAG_ID.NOBR)) {
         callAdoptionAgency(p, token);
         p._reconstructActiveFormattingElements();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.activeFormattingElements.pushElement(p.openElements.current, token);
 }
 function appletStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.activeFormattingElements.insertMarker();
     p.framesetOk = false;
 }
 function tableStartTagInBody(p, token) {
-    if (p.treeAdapter.getDocumentMode(p.document) !== html$1.DOCUMENT_MODE.QUIRKS && p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.treeAdapter.getDocumentMode(p.document) !== html.DOCUMENT_MODE.QUIRKS && p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.framesetOk = false;
     p.insertionMode = InsertionMode.IN_TABLE;
 }
 function areaStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    p._appendElement(token, html$1.NS.HTML);
+    p._appendElement(token, html.NS.HTML);
     p.framesetOk = false;
     token.ackSelfClosing = true;
 }
 function isHiddenInput(token$1) {
-    const inputType = (0, token.getTokenAttr)(token$1, html$1.ATTRS.TYPE);
+    const inputType = (0, token.getTokenAttr)(token$1, html.ATTRS.TYPE);
     return inputType != null && inputType.toLowerCase() === HIDDEN_INPUT_TYPE;
 }
 function inputStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    p._appendElement(token, html$1.NS.HTML);
+    p._appendElement(token, html.NS.HTML);
     if (!isHiddenInput(token)) {
         p.framesetOk = false;
     }
     token.ackSelfClosing = true;
 }
 function paramStartTagInBody(p, token) {
-    p._appendElement(token, html$1.NS.HTML);
+    p._appendElement(token, html.NS.HTML);
     token.ackSelfClosing = true;
 }
 function hrStartTagInBody(p, token) {
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
-    p._appendElement(token, html$1.NS.HTML);
+    p._appendElement(token, html.NS.HTML);
     p.framesetOk = false;
     token.ackSelfClosing = true;
 }
@@ -6724,11 +6724,11 @@ function textareaStartTagInBody(p, token) {
     // p.framesetOk = false;
     // p.insertionMode = InsertionMode.TEXT;
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.framesetOk = false;
 }
 function xmpStartTagInBody(p, token) {
-    if (p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
+    if (p.openElements.hasInButtonScope(html.TAG_ID.P)) {
         p._closePElement();
     }
     p._reconstructActiveFormattingElements();
@@ -6746,7 +6746,7 @@ function noembedStartTagInBody(p, token) {
 }
 function selectStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.framesetOk = false;
     p.insertionMode =
         p.insertionMode === InsertionMode.IN_TABLE ||
@@ -6758,33 +6758,33 @@ function selectStartTagInBody(p, token) {
             : InsertionMode.IN_SELECT;
 }
 function optgroupStartTagInBody(p, token) {
-    if (p.openElements.currentTagId === html$1.TAG_ID.OPTION) {
+    if (p.openElements.currentTagId === html.TAG_ID.OPTION) {
         p.openElements.pop();
     }
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function rbStartTagInBody(p, token) {
-    if (p.openElements.hasInScope(html$1.TAG_ID.RUBY)) {
+    if (p.openElements.hasInScope(html.TAG_ID.RUBY)) {
         p.openElements.generateImpliedEndTags();
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function rtStartTagInBody(p, token) {
-    if (p.openElements.hasInScope(html$1.TAG_ID.RUBY)) {
-        p.openElements.generateImpliedEndTagsWithExclusion(html$1.TAG_ID.RTC);
+    if (p.openElements.hasInScope(html.TAG_ID.RUBY)) {
+        p.openElements.generateImpliedEndTagsWithExclusion(html.TAG_ID.RTC);
     }
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function mathStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
     foreignContent$1.adjustTokenMathMLAttrs(token);
     foreignContent$1.adjustTokenXMLAttrs(token);
     if (token.selfClosing) {
-        p._appendElement(token, html$1.NS.MATHML);
+        p._appendElement(token, html.NS.MATHML);
     }
     else {
-        p._insertElement(token, html$1.NS.MATHML);
+        p._insertElement(token, html.NS.MATHML);
     }
     token.ackSelfClosing = true;
 }
@@ -6793,202 +6793,202 @@ function svgStartTagInBody(p, token) {
     foreignContent$1.adjustTokenSVGAttrs(token);
     foreignContent$1.adjustTokenXMLAttrs(token);
     if (token.selfClosing) {
-        p._appendElement(token, html$1.NS.SVG);
+        p._appendElement(token, html.NS.SVG);
     }
     else {
-        p._insertElement(token, html$1.NS.SVG);
+        p._insertElement(token, html.NS.SVG);
     }
     token.ackSelfClosing = true;
 }
 function genericStartTagInBody(p, token) {
     p._reconstructActiveFormattingElements();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
 }
 function startTagInBody(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.I:
-        case html$1.TAG_ID.S:
-        case html$1.TAG_ID.B:
-        case html$1.TAG_ID.U:
-        case html$1.TAG_ID.EM:
-        case html$1.TAG_ID.TT:
-        case html$1.TAG_ID.BIG:
-        case html$1.TAG_ID.CODE:
-        case html$1.TAG_ID.FONT:
-        case html$1.TAG_ID.SMALL:
-        case html$1.TAG_ID.STRIKE:
-        case html$1.TAG_ID.STRONG: {
+        case html.TAG_ID.I:
+        case html.TAG_ID.S:
+        case html.TAG_ID.B:
+        case html.TAG_ID.U:
+        case html.TAG_ID.EM:
+        case html.TAG_ID.TT:
+        case html.TAG_ID.BIG:
+        case html.TAG_ID.CODE:
+        case html.TAG_ID.FONT:
+        case html.TAG_ID.SMALL:
+        case html.TAG_ID.STRIKE:
+        case html.TAG_ID.STRONG: {
             bStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.A: {
+        case html.TAG_ID.A: {
             aStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.H1:
-        case html$1.TAG_ID.H2:
-        case html$1.TAG_ID.H3:
-        case html$1.TAG_ID.H4:
-        case html$1.TAG_ID.H5:
-        case html$1.TAG_ID.H6: {
+        case html.TAG_ID.H1:
+        case html.TAG_ID.H2:
+        case html.TAG_ID.H3:
+        case html.TAG_ID.H4:
+        case html.TAG_ID.H5:
+        case html.TAG_ID.H6: {
             numberedHeaderStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.P:
-        case html$1.TAG_ID.DL:
-        case html$1.TAG_ID.OL:
-        case html$1.TAG_ID.UL:
-        case html$1.TAG_ID.DIV:
-        case html$1.TAG_ID.DIR:
-        case html$1.TAG_ID.NAV:
-        case html$1.TAG_ID.MAIN:
-        case html$1.TAG_ID.MENU:
-        case html$1.TAG_ID.ASIDE:
-        case html$1.TAG_ID.CENTER:
-        case html$1.TAG_ID.FIGURE:
-        case html$1.TAG_ID.FOOTER:
-        case html$1.TAG_ID.HEADER:
-        case html$1.TAG_ID.HGROUP:
-        case html$1.TAG_ID.DIALOG:
-        case html$1.TAG_ID.DETAILS:
-        case html$1.TAG_ID.ADDRESS:
-        case html$1.TAG_ID.ARTICLE:
-        case html$1.TAG_ID.SECTION:
-        case html$1.TAG_ID.SUMMARY:
-        case html$1.TAG_ID.FIELDSET:
-        case html$1.TAG_ID.BLOCKQUOTE:
-        case html$1.TAG_ID.FIGCAPTION: {
+        case html.TAG_ID.P:
+        case html.TAG_ID.DL:
+        case html.TAG_ID.OL:
+        case html.TAG_ID.UL:
+        case html.TAG_ID.DIV:
+        case html.TAG_ID.DIR:
+        case html.TAG_ID.NAV:
+        case html.TAG_ID.MAIN:
+        case html.TAG_ID.MENU:
+        case html.TAG_ID.ASIDE:
+        case html.TAG_ID.CENTER:
+        case html.TAG_ID.FIGURE:
+        case html.TAG_ID.FOOTER:
+        case html.TAG_ID.HEADER:
+        case html.TAG_ID.HGROUP:
+        case html.TAG_ID.DIALOG:
+        case html.TAG_ID.DETAILS:
+        case html.TAG_ID.ADDRESS:
+        case html.TAG_ID.ARTICLE:
+        case html.TAG_ID.SECTION:
+        case html.TAG_ID.SUMMARY:
+        case html.TAG_ID.FIELDSET:
+        case html.TAG_ID.BLOCKQUOTE:
+        case html.TAG_ID.FIGCAPTION: {
             addressStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.LI:
-        case html$1.TAG_ID.DD:
-        case html$1.TAG_ID.DT: {
+        case html.TAG_ID.LI:
+        case html.TAG_ID.DD:
+        case html.TAG_ID.DT: {
             listItemStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.BR:
-        case html$1.TAG_ID.IMG:
-        case html$1.TAG_ID.WBR:
-        case html$1.TAG_ID.AREA:
-        case html$1.TAG_ID.EMBED:
-        case html$1.TAG_ID.KEYGEN: {
+        case html.TAG_ID.BR:
+        case html.TAG_ID.IMG:
+        case html.TAG_ID.WBR:
+        case html.TAG_ID.AREA:
+        case html.TAG_ID.EMBED:
+        case html.TAG_ID.KEYGEN: {
             areaStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.HR: {
+        case html.TAG_ID.HR: {
             hrStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.RB:
-        case html$1.TAG_ID.RTC: {
+        case html.TAG_ID.RB:
+        case html.TAG_ID.RTC: {
             rbStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.RT:
-        case html$1.TAG_ID.RP: {
+        case html.TAG_ID.RT:
+        case html.TAG_ID.RP: {
             rtStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.PRE:
-        case html$1.TAG_ID.LISTING: {
+        case html.TAG_ID.PRE:
+        case html.TAG_ID.LISTING: {
             preStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.XMP: {
+        case html.TAG_ID.XMP: {
             xmpStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.SVG: {
+        case html.TAG_ID.SVG: {
             svgStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             htmlStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.BASE:
-        case html$1.TAG_ID.LINK:
-        case html$1.TAG_ID.META:
-        case html$1.TAG_ID.STYLE:
-        case html$1.TAG_ID.TITLE:
-        case html$1.TAG_ID.SCRIPT:
-        case html$1.TAG_ID.BGSOUND:
-        case html$1.TAG_ID.BASEFONT:
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.BASE:
+        case html.TAG_ID.LINK:
+        case html.TAG_ID.META:
+        case html.TAG_ID.STYLE:
+        case html.TAG_ID.TITLE:
+        case html.TAG_ID.SCRIPT:
+        case html.TAG_ID.BGSOUND:
+        case html.TAG_ID.BASEFONT:
+        case html.TAG_ID.TEMPLATE: {
             startTagInHead(p, token);
             break;
         }
-        case html$1.TAG_ID.BODY: {
+        case html.TAG_ID.BODY: {
             bodyStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.FORM: {
+        case html.TAG_ID.FORM: {
             formStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.NOBR: {
+        case html.TAG_ID.NOBR: {
             nobrStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.MATH: {
+        case html.TAG_ID.MATH: {
             mathStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.TABLE: {
+        case html.TAG_ID.TABLE: {
             tableStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.INPUT: {
+        case html.TAG_ID.INPUT: {
             inputStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.PARAM:
-        case html$1.TAG_ID.TRACK:
-        case html$1.TAG_ID.SOURCE: {
+        case html.TAG_ID.PARAM:
+        case html.TAG_ID.TRACK:
+        case html.TAG_ID.SOURCE: {
             paramStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.IMAGE: {
+        case html.TAG_ID.IMAGE: {
             imageStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.BUTTON: {
+        case html.TAG_ID.BUTTON: {
             buttonStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.APPLET:
-        case html$1.TAG_ID.OBJECT:
-        case html$1.TAG_ID.MARQUEE: {
+        case html.TAG_ID.APPLET:
+        case html.TAG_ID.OBJECT:
+        case html.TAG_ID.MARQUEE: {
             appletStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.IFRAME: {
+        case html.TAG_ID.IFRAME: {
             iframeStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.SELECT: {
+        case html.TAG_ID.SELECT: {
             selectStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.OPTION:
-        case html$1.TAG_ID.OPTGROUP: {
+        case html.TAG_ID.OPTION:
+        case html.TAG_ID.OPTGROUP: {
             optgroupStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.NOEMBED: {
+        case html.TAG_ID.NOEMBED: {
             noembedStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.FRAMESET: {
+        case html.TAG_ID.FRAMESET: {
             framesetStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.TEXTAREA: {
+        case html.TAG_ID.TEXTAREA: {
             textareaStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.NOSCRIPT: {
+        case html.TAG_ID.NOSCRIPT: {
             if (p.options.scriptingEnabled) {
                 noembedStartTagInBody(p, token);
             }
@@ -6997,21 +6997,21 @@ function startTagInBody(p, token) {
             }
             break;
         }
-        case html$1.TAG_ID.PLAINTEXT: {
+        case html.TAG_ID.PLAINTEXT: {
             plaintextStartTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TR:
-        case html$1.TAG_ID.HEAD:
-        case html$1.TAG_ID.FRAME:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD:
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COLGROUP: {
+        case html.TAG_ID.COL:
+        case html.TAG_ID.TH:
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TR:
+        case html.TAG_ID.HEAD:
+        case html.TAG_ID.FRAME:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD:
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COLGROUP: {
             // Ignore token
             break;
         }
@@ -7021,7 +7021,7 @@ function startTagInBody(p, token) {
     }
 }
 function bodyEndTagInBody(p, token) {
-    if (p.openElements.hasInScope(html$1.TAG_ID.BODY)) {
+    if (p.openElements.hasInScope(html.TAG_ID.BODY)) {
         p.insertionMode = InsertionMode.AFTER_BODY;
         //NOTE: <body> is never popped from the stack, so we need to updated
         //the end location explicitly.
@@ -7034,7 +7034,7 @@ function bodyEndTagInBody(p, token) {
     }
 }
 function htmlEndTagInBody(p, token) {
-    if (p.openElements.hasInScope(html$1.TAG_ID.BODY)) {
+    if (p.openElements.hasInScope(html.TAG_ID.BODY)) {
         p.insertionMode = InsertionMode.AFTER_BODY;
         endTagAfterBody(p, token);
     }
@@ -7052,10 +7052,10 @@ function formEndTagInBody(p) {
     if (!inTemplate) {
         p.formElement = null;
     }
-    if ((formElement || inTemplate) && p.openElements.hasInScope(html$1.TAG_ID.FORM)) {
+    if ((formElement || inTemplate) && p.openElements.hasInScope(html.TAG_ID.FORM)) {
         p.openElements.generateImpliedEndTags();
         if (inTemplate) {
-            p.openElements.popUntilTagNamePopped(html$1.TAG_ID.FORM);
+            p.openElements.popUntilTagNamePopped(html.TAG_ID.FORM);
         }
         else if (formElement) {
             p.openElements.remove(formElement);
@@ -7063,15 +7063,15 @@ function formEndTagInBody(p) {
     }
 }
 function pEndTagInBody(p) {
-    if (!p.openElements.hasInButtonScope(html$1.TAG_ID.P)) {
-        p._insertFakeElement(html$1.TAG_NAMES.P, html$1.TAG_ID.P);
+    if (!p.openElements.hasInButtonScope(html.TAG_ID.P)) {
+        p._insertFakeElement(html.TAG_NAMES.P, html.TAG_ID.P);
     }
     p._closePElement();
 }
 function liEndTagInBody(p) {
-    if (p.openElements.hasInListItemScope(html$1.TAG_ID.LI)) {
-        p.openElements.generateImpliedEndTagsWithExclusion(html$1.TAG_ID.LI);
-        p.openElements.popUntilTagNamePopped(html$1.TAG_ID.LI);
+    if (p.openElements.hasInListItemScope(html.TAG_ID.LI)) {
+        p.openElements.generateImpliedEndTagsWithExclusion(html.TAG_ID.LI);
+        p.openElements.popUntilTagNamePopped(html.TAG_ID.LI);
     }
 }
 function ddEndTagInBody(p, token) {
@@ -7097,7 +7097,7 @@ function appletEndTagInBody(p, token) {
 }
 function brEndTagInBody(p) {
     p._reconstructActiveFormattingElements();
-    p._insertFakeElement(html$1.TAG_NAMES.BR, html$1.TAG_ID.BR);
+    p._insertFakeElement(html.TAG_NAMES.BR, html.TAG_ID.BR);
     p.openElements.pop();
     p.framesetOk = false;
 }
@@ -7108,7 +7108,7 @@ function genericEndTagInBody(p, token) {
         const element = p.openElements.items[i];
         const elementId = p.openElements.tagIDs[i];
         // Compare the tag name here, as the tag might not be a known tag with an ID.
-        if (tid === elementId && (tid !== html$1.TAG_ID.UNKNOWN || p.treeAdapter.getTagName(element) === tn)) {
+        if (tid === elementId && (tid !== html.TAG_ID.UNKNOWN || p.treeAdapter.getTagName(element) === tn)) {
             p.openElements.generateImpliedEndTagsWithExclusion(tid);
             if (p.openElements.stackTop >= i)
                 p.openElements.shortenToLength(i);
@@ -7121,97 +7121,97 @@ function genericEndTagInBody(p, token) {
 }
 function endTagInBody(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.A:
-        case html$1.TAG_ID.B:
-        case html$1.TAG_ID.I:
-        case html$1.TAG_ID.S:
-        case html$1.TAG_ID.U:
-        case html$1.TAG_ID.EM:
-        case html$1.TAG_ID.TT:
-        case html$1.TAG_ID.BIG:
-        case html$1.TAG_ID.CODE:
-        case html$1.TAG_ID.FONT:
-        case html$1.TAG_ID.NOBR:
-        case html$1.TAG_ID.SMALL:
-        case html$1.TAG_ID.STRIKE:
-        case html$1.TAG_ID.STRONG: {
+        case html.TAG_ID.A:
+        case html.TAG_ID.B:
+        case html.TAG_ID.I:
+        case html.TAG_ID.S:
+        case html.TAG_ID.U:
+        case html.TAG_ID.EM:
+        case html.TAG_ID.TT:
+        case html.TAG_ID.BIG:
+        case html.TAG_ID.CODE:
+        case html.TAG_ID.FONT:
+        case html.TAG_ID.NOBR:
+        case html.TAG_ID.SMALL:
+        case html.TAG_ID.STRIKE:
+        case html.TAG_ID.STRONG: {
             callAdoptionAgency(p, token);
             break;
         }
-        case html$1.TAG_ID.P: {
+        case html.TAG_ID.P: {
             pEndTagInBody(p);
             break;
         }
-        case html$1.TAG_ID.DL:
-        case html$1.TAG_ID.UL:
-        case html$1.TAG_ID.OL:
-        case html$1.TAG_ID.DIR:
-        case html$1.TAG_ID.DIV:
-        case html$1.TAG_ID.NAV:
-        case html$1.TAG_ID.PRE:
-        case html$1.TAG_ID.MAIN:
-        case html$1.TAG_ID.MENU:
-        case html$1.TAG_ID.ASIDE:
-        case html$1.TAG_ID.BUTTON:
-        case html$1.TAG_ID.CENTER:
-        case html$1.TAG_ID.FIGURE:
-        case html$1.TAG_ID.FOOTER:
-        case html$1.TAG_ID.HEADER:
-        case html$1.TAG_ID.HGROUP:
-        case html$1.TAG_ID.DIALOG:
-        case html$1.TAG_ID.ADDRESS:
-        case html$1.TAG_ID.ARTICLE:
-        case html$1.TAG_ID.DETAILS:
-        case html$1.TAG_ID.SECTION:
-        case html$1.TAG_ID.SUMMARY:
-        case html$1.TAG_ID.LISTING:
-        case html$1.TAG_ID.FIELDSET:
-        case html$1.TAG_ID.BLOCKQUOTE:
-        case html$1.TAG_ID.FIGCAPTION: {
+        case html.TAG_ID.DL:
+        case html.TAG_ID.UL:
+        case html.TAG_ID.OL:
+        case html.TAG_ID.DIR:
+        case html.TAG_ID.DIV:
+        case html.TAG_ID.NAV:
+        case html.TAG_ID.PRE:
+        case html.TAG_ID.MAIN:
+        case html.TAG_ID.MENU:
+        case html.TAG_ID.ASIDE:
+        case html.TAG_ID.BUTTON:
+        case html.TAG_ID.CENTER:
+        case html.TAG_ID.FIGURE:
+        case html.TAG_ID.FOOTER:
+        case html.TAG_ID.HEADER:
+        case html.TAG_ID.HGROUP:
+        case html.TAG_ID.DIALOG:
+        case html.TAG_ID.ADDRESS:
+        case html.TAG_ID.ARTICLE:
+        case html.TAG_ID.DETAILS:
+        case html.TAG_ID.SECTION:
+        case html.TAG_ID.SUMMARY:
+        case html.TAG_ID.LISTING:
+        case html.TAG_ID.FIELDSET:
+        case html.TAG_ID.BLOCKQUOTE:
+        case html.TAG_ID.FIGCAPTION: {
             addressEndTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.LI: {
+        case html.TAG_ID.LI: {
             liEndTagInBody(p);
             break;
         }
-        case html$1.TAG_ID.DD:
-        case html$1.TAG_ID.DT: {
+        case html.TAG_ID.DD:
+        case html.TAG_ID.DT: {
             ddEndTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.H1:
-        case html$1.TAG_ID.H2:
-        case html$1.TAG_ID.H3:
-        case html$1.TAG_ID.H4:
-        case html$1.TAG_ID.H5:
-        case html$1.TAG_ID.H6: {
+        case html.TAG_ID.H1:
+        case html.TAG_ID.H2:
+        case html.TAG_ID.H3:
+        case html.TAG_ID.H4:
+        case html.TAG_ID.H5:
+        case html.TAG_ID.H6: {
             numberedHeaderEndTagInBody(p);
             break;
         }
-        case html$1.TAG_ID.BR: {
+        case html.TAG_ID.BR: {
             brEndTagInBody(p);
             break;
         }
-        case html$1.TAG_ID.BODY: {
+        case html.TAG_ID.BODY: {
             bodyEndTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             htmlEndTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.FORM: {
+        case html.TAG_ID.FORM: {
             formEndTagInBody(p);
             break;
         }
-        case html$1.TAG_ID.APPLET:
-        case html$1.TAG_ID.OBJECT:
-        case html$1.TAG_ID.MARQUEE: {
+        case html.TAG_ID.APPLET:
+        case html.TAG_ID.OBJECT:
+        case html.TAG_ID.MARQUEE: {
             appletEndTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             templateEndTagInHead(p, token);
             break;
         }
@@ -7232,7 +7232,7 @@ function eofInBody(p, token) {
 //------------------------------------------------------------------
 function endTagInText(p, token) {
     var _a;
-    if (token.tagID === html$1.TAG_ID.SCRIPT) {
+    if (token.tagID === html.TAG_ID.SCRIPT) {
         (_a = p.scriptHandler) === null || _a === void 0 ? void 0 : _a.call(p, p.openElements.current);
     }
     p.openElements.pop();
@@ -7271,41 +7271,41 @@ function characterInTable(p, token$1) {
 function captionStartTagInTable(p, token) {
     p.openElements.clearBackToTableContext();
     p.activeFormattingElements.insertMarker();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.insertionMode = InsertionMode.IN_CAPTION;
 }
 function colgroupStartTagInTable(p, token) {
     p.openElements.clearBackToTableContext();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.insertionMode = InsertionMode.IN_COLUMN_GROUP;
 }
 function colStartTagInTable(p, token) {
     p.openElements.clearBackToTableContext();
-    p._insertFakeElement(html$1.TAG_NAMES.COLGROUP, html$1.TAG_ID.COLGROUP);
+    p._insertFakeElement(html.TAG_NAMES.COLGROUP, html.TAG_ID.COLGROUP);
     p.insertionMode = InsertionMode.IN_COLUMN_GROUP;
     startTagInColumnGroup(p, token);
 }
 function tbodyStartTagInTable(p, token) {
     p.openElements.clearBackToTableContext();
-    p._insertElement(token, html$1.NS.HTML);
+    p._insertElement(token, html.NS.HTML);
     p.insertionMode = InsertionMode.IN_TABLE_BODY;
 }
 function tdStartTagInTable(p, token) {
     p.openElements.clearBackToTableContext();
-    p._insertFakeElement(html$1.TAG_NAMES.TBODY, html$1.TAG_ID.TBODY);
+    p._insertFakeElement(html.TAG_NAMES.TBODY, html.TAG_ID.TBODY);
     p.insertionMode = InsertionMode.IN_TABLE_BODY;
     startTagInTableBody(p, token);
 }
 function tableStartTagInTable(p, token) {
-    if (p.openElements.hasInTableScope(html$1.TAG_ID.TABLE)) {
-        p.openElements.popUntilTagNamePopped(html$1.TAG_ID.TABLE);
+    if (p.openElements.hasInTableScope(html.TAG_ID.TABLE)) {
+        p.openElements.popUntilTagNamePopped(html.TAG_ID.TABLE);
         p._resetInsertionMode();
         p._processStartTag(token);
     }
 }
 function inputStartTagInTable(p, token) {
     if (isHiddenInput(token)) {
-        p._appendElement(token, html$1.NS.HTML);
+        p._appendElement(token, html.NS.HTML);
     }
     else {
         tokenInTable(p, token);
@@ -7314,52 +7314,52 @@ function inputStartTagInTable(p, token) {
 }
 function formStartTagInTable(p, token) {
     if (!p.formElement && p.openElements.tmplCount === 0) {
-        p._insertElement(token, html$1.NS.HTML);
+        p._insertElement(token, html.NS.HTML);
         p.formElement = p.openElements.current;
         p.openElements.pop();
     }
 }
 function startTagInTable(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.TR: {
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TH:
+        case html.TAG_ID.TR: {
             tdStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.STYLE:
-        case html$1.TAG_ID.SCRIPT:
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.STYLE:
+        case html.TAG_ID.SCRIPT:
+        case html.TAG_ID.TEMPLATE: {
             startTagInHead(p, token);
             break;
         }
-        case html$1.TAG_ID.COL: {
+        case html.TAG_ID.COL: {
             colStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.FORM: {
+        case html.TAG_ID.FORM: {
             formStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.TABLE: {
+        case html.TAG_ID.TABLE: {
             tableStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD: {
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD: {
             tbodyStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.INPUT: {
+        case html.TAG_ID.INPUT: {
             inputStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.CAPTION: {
+        case html.TAG_ID.CAPTION: {
             captionStartTagInTable(p, token);
             break;
         }
-        case html$1.TAG_ID.COLGROUP: {
+        case html.TAG_ID.COLGROUP: {
             colgroupStartTagInTable(p, token);
             break;
         }
@@ -7370,28 +7370,28 @@ function startTagInTable(p, token) {
 }
 function endTagInTable(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.TABLE: {
-            if (p.openElements.hasInTableScope(html$1.TAG_ID.TABLE)) {
-                p.openElements.popUntilTagNamePopped(html$1.TAG_ID.TABLE);
+        case html.TAG_ID.TABLE: {
+            if (p.openElements.hasInTableScope(html.TAG_ID.TABLE)) {
+                p.openElements.popUntilTagNamePopped(html.TAG_ID.TABLE);
                 p._resetInsertionMode();
             }
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             templateEndTagInHead(p, token);
             break;
         }
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.HTML:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.THEAD:
-        case html$1.TAG_ID.TR: {
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.HTML:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.TH:
+        case html.TAG_ID.THEAD:
+        case html.TAG_ID.TR: {
             // Ignore token
             break;
         }
@@ -7433,13 +7433,13 @@ function tokenInTableText(p, token) {
 }
 // The "in caption" insertion mode
 //------------------------------------------------------------------
-const TABLE_VOID_ELEMENTS = new Set([html$1.TAG_ID.CAPTION, html$1.TAG_ID.COL, html$1.TAG_ID.COLGROUP, html$1.TAG_ID.TBODY, html$1.TAG_ID.TD, html$1.TAG_ID.TFOOT, html$1.TAG_ID.TH, html$1.TAG_ID.THEAD, html$1.TAG_ID.TR]);
+const TABLE_VOID_ELEMENTS = new Set([html.TAG_ID.CAPTION, html.TAG_ID.COL, html.TAG_ID.COLGROUP, html.TAG_ID.TBODY, html.TAG_ID.TD, html.TAG_ID.TFOOT, html.TAG_ID.TH, html.TAG_ID.THEAD, html.TAG_ID.TR]);
 function startTagInCaption(p, token) {
     const tn = token.tagID;
     if (TABLE_VOID_ELEMENTS.has(tn)) {
-        if (p.openElements.hasInTableScope(html$1.TAG_ID.CAPTION)) {
+        if (p.openElements.hasInTableScope(html.TAG_ID.CAPTION)) {
             p.openElements.generateImpliedEndTags();
-            p.openElements.popUntilTagNamePopped(html$1.TAG_ID.CAPTION);
+            p.openElements.popUntilTagNamePopped(html.TAG_ID.CAPTION);
             p.activeFormattingElements.clearToLastMarker();
             p.insertionMode = InsertionMode.IN_TABLE;
             startTagInTable(p, token);
@@ -7452,29 +7452,29 @@ function startTagInCaption(p, token) {
 function endTagInCaption(p, token) {
     const tn = token.tagID;
     switch (tn) {
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.TABLE: {
-            if (p.openElements.hasInTableScope(html$1.TAG_ID.CAPTION)) {
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.TABLE: {
+            if (p.openElements.hasInTableScope(html.TAG_ID.CAPTION)) {
                 p.openElements.generateImpliedEndTags();
-                p.openElements.popUntilTagNamePopped(html$1.TAG_ID.CAPTION);
+                p.openElements.popUntilTagNamePopped(html.TAG_ID.CAPTION);
                 p.activeFormattingElements.clearToLastMarker();
                 p.insertionMode = InsertionMode.IN_TABLE;
-                if (tn === html$1.TAG_ID.TABLE) {
+                if (tn === html.TAG_ID.TABLE) {
                     endTagInTable(p, token);
                 }
             }
             break;
         }
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.HTML:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.THEAD:
-        case html$1.TAG_ID.TR: {
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.HTML:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.TH:
+        case html.TAG_ID.THEAD:
+        case html.TAG_ID.TR: {
             // Ignore token
             break;
         }
@@ -7487,16 +7487,16 @@ function endTagInCaption(p, token) {
 //------------------------------------------------------------------
 function startTagInColumnGroup(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.COL: {
-            p._appendElement(token, html$1.NS.HTML);
+        case html.TAG_ID.COL: {
+            p._appendElement(token, html.NS.HTML);
             token.ackSelfClosing = true;
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             startTagInHead(p, token);
             break;
         }
@@ -7507,18 +7507,18 @@ function startTagInColumnGroup(p, token) {
 }
 function endTagInColumnGroup(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.COLGROUP: {
-            if (p.openElements.currentTagId === html$1.TAG_ID.COLGROUP) {
+        case html.TAG_ID.COLGROUP: {
+            if (p.openElements.currentTagId === html.TAG_ID.COLGROUP) {
                 p.openElements.pop();
                 p.insertionMode = InsertionMode.IN_TABLE;
             }
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             templateEndTagInHead(p, token);
             break;
         }
-        case html$1.TAG_ID.COL: {
+        case html.TAG_ID.COL: {
             // Ignore token
             break;
         }
@@ -7528,7 +7528,7 @@ function endTagInColumnGroup(p, token) {
     }
 }
 function tokenInColumnGroup(p, token) {
-    if (p.openElements.currentTagId === html$1.TAG_ID.COLGROUP) {
+    if (p.openElements.currentTagId === html.TAG_ID.COLGROUP) {
         p.openElements.pop();
         p.insertionMode = InsertionMode.IN_TABLE;
         p._processToken(token);
@@ -7538,26 +7538,26 @@ function tokenInColumnGroup(p, token) {
 //------------------------------------------------------------------
 function startTagInTableBody(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.TR: {
+        case html.TAG_ID.TR: {
             p.openElements.clearBackToTableBodyContext();
-            p._insertElement(token, html$1.NS.HTML);
+            p._insertElement(token, html.NS.HTML);
             p.insertionMode = InsertionMode.IN_ROW;
             break;
         }
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.TD: {
+        case html.TAG_ID.TH:
+        case html.TAG_ID.TD: {
             p.openElements.clearBackToTableBodyContext();
-            p._insertFakeElement(html$1.TAG_NAMES.TR, html$1.TAG_ID.TR);
+            p._insertFakeElement(html.TAG_NAMES.TR, html.TAG_ID.TR);
             p.insertionMode = InsertionMode.IN_ROW;
             startTagInRow(p, token);
             break;
         }
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD: {
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD: {
             if (p.openElements.hasTableBodyContextInTableScope()) {
                 p.openElements.clearBackToTableBodyContext();
                 p.openElements.pop();
@@ -7574,9 +7574,9 @@ function startTagInTableBody(p, token) {
 function endTagInTableBody(p, token) {
     const tn = token.tagID;
     switch (token.tagID) {
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD: {
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD: {
             if (p.openElements.hasInTableScope(tn)) {
                 p.openElements.clearBackToTableBodyContext();
                 p.openElements.pop();
@@ -7584,7 +7584,7 @@ function endTagInTableBody(p, token) {
             }
             break;
         }
-        case html$1.TAG_ID.TABLE: {
+        case html.TAG_ID.TABLE: {
             if (p.openElements.hasTableBodyContextInTableScope()) {
                 p.openElements.clearBackToTableBodyContext();
                 p.openElements.pop();
@@ -7593,14 +7593,14 @@ function endTagInTableBody(p, token) {
             }
             break;
         }
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.HTML:
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.TR: {
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.HTML:
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TH:
+        case html.TAG_ID.TR: {
             // Ignore token
             break;
         }
@@ -7613,22 +7613,22 @@ function endTagInTableBody(p, token) {
 //------------------------------------------------------------------
 function startTagInRow(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.TH:
-        case html$1.TAG_ID.TD: {
+        case html.TAG_ID.TH:
+        case html.TAG_ID.TD: {
             p.openElements.clearBackToTableRowContext();
-            p._insertElement(token, html$1.NS.HTML);
+            p._insertElement(token, html.NS.HTML);
             p.insertionMode = InsertionMode.IN_CELL;
             p.activeFormattingElements.insertMarker();
             break;
         }
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD:
-        case html$1.TAG_ID.TR: {
-            if (p.openElements.hasInTableScope(html$1.TAG_ID.TR)) {
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD:
+        case html.TAG_ID.TR: {
+            if (p.openElements.hasInTableScope(html.TAG_ID.TR)) {
                 p.openElements.clearBackToTableRowContext();
                 p.openElements.pop();
                 p.insertionMode = InsertionMode.IN_TABLE_BODY;
@@ -7643,27 +7643,16 @@ function startTagInRow(p, token) {
 }
 function endTagInRow(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.TR: {
-            if (p.openElements.hasInTableScope(html$1.TAG_ID.TR)) {
+        case html.TAG_ID.TR: {
+            if (p.openElements.hasInTableScope(html.TAG_ID.TR)) {
                 p.openElements.clearBackToTableRowContext();
                 p.openElements.pop();
                 p.insertionMode = InsertionMode.IN_TABLE_BODY;
             }
             break;
         }
-        case html$1.TAG_ID.TABLE: {
-            if (p.openElements.hasInTableScope(html$1.TAG_ID.TR)) {
-                p.openElements.clearBackToTableRowContext();
-                p.openElements.pop();
-                p.insertionMode = InsertionMode.IN_TABLE_BODY;
-                endTagInTableBody(p, token);
-            }
-            break;
-        }
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD: {
-            if (p.openElements.hasInTableScope(token.tagID) || p.openElements.hasInTableScope(html$1.TAG_ID.TR)) {
+        case html.TAG_ID.TABLE: {
+            if (p.openElements.hasInTableScope(html.TAG_ID.TR)) {
                 p.openElements.clearBackToTableRowContext();
                 p.openElements.pop();
                 p.insertionMode = InsertionMode.IN_TABLE_BODY;
@@ -7671,13 +7660,24 @@ function endTagInRow(p, token) {
             }
             break;
         }
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.HTML:
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TH: {
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD: {
+            if (p.openElements.hasInTableScope(token.tagID) || p.openElements.hasInTableScope(html.TAG_ID.TR)) {
+                p.openElements.clearBackToTableRowContext();
+                p.openElements.pop();
+                p.insertionMode = InsertionMode.IN_TABLE_BODY;
+                endTagInTableBody(p, token);
+            }
+            break;
+        }
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.HTML:
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TH: {
             // Ignore end tag
             break;
         }
@@ -7690,7 +7690,7 @@ function endTagInRow(p, token) {
 function startTagInCell(p, token) {
     const tn = token.tagID;
     if (TABLE_VOID_ELEMENTS.has(tn)) {
-        if (p.openElements.hasInTableScope(html$1.TAG_ID.TD) || p.openElements.hasInTableScope(html$1.TAG_ID.TH)) {
+        if (p.openElements.hasInTableScope(html.TAG_ID.TD) || p.openElements.hasInTableScope(html.TAG_ID.TH)) {
             p._closeTableCell();
             startTagInRow(p, token);
         }
@@ -7702,8 +7702,8 @@ function startTagInCell(p, token) {
 function endTagInCell(p, token) {
     const tn = token.tagID;
     switch (tn) {
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TH: {
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TH: {
             if (p.openElements.hasInTableScope(tn)) {
                 p.openElements.generateImpliedEndTags();
                 p.openElements.popUntilTagNamePopped(tn);
@@ -7712,22 +7712,22 @@ function endTagInCell(p, token) {
             }
             break;
         }
-        case html$1.TAG_ID.TABLE:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD:
-        case html$1.TAG_ID.TR: {
+        case html.TAG_ID.TABLE:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD:
+        case html.TAG_ID.TR: {
             if (p.openElements.hasInTableScope(tn)) {
                 p._closeTableCell();
                 endTagInRow(p, token);
             }
             break;
         }
-        case html$1.TAG_ID.BODY:
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COL:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.BODY:
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COL:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.HTML: {
             // Ignore token
             break;
         }
@@ -7740,42 +7740,42 @@ function endTagInCell(p, token) {
 //------------------------------------------------------------------
 function startTagInSelect(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.OPTION: {
-            if (p.openElements.currentTagId === html$1.TAG_ID.OPTION) {
+        case html.TAG_ID.OPTION: {
+            if (p.openElements.currentTagId === html.TAG_ID.OPTION) {
                 p.openElements.pop();
             }
-            p._insertElement(token, html$1.NS.HTML);
+            p._insertElement(token, html.NS.HTML);
             break;
         }
-        case html$1.TAG_ID.OPTGROUP: {
-            if (p.openElements.currentTagId === html$1.TAG_ID.OPTION) {
+        case html.TAG_ID.OPTGROUP: {
+            if (p.openElements.currentTagId === html.TAG_ID.OPTION) {
                 p.openElements.pop();
             }
-            if (p.openElements.currentTagId === html$1.TAG_ID.OPTGROUP) {
+            if (p.openElements.currentTagId === html.TAG_ID.OPTGROUP) {
                 p.openElements.pop();
             }
-            p._insertElement(token, html$1.NS.HTML);
+            p._insertElement(token, html.NS.HTML);
             break;
         }
-        case html$1.TAG_ID.INPUT:
-        case html$1.TAG_ID.KEYGEN:
-        case html$1.TAG_ID.TEXTAREA:
-        case html$1.TAG_ID.SELECT: {
-            if (p.openElements.hasInSelectScope(html$1.TAG_ID.SELECT)) {
-                p.openElements.popUntilTagNamePopped(html$1.TAG_ID.SELECT);
+        case html.TAG_ID.INPUT:
+        case html.TAG_ID.KEYGEN:
+        case html.TAG_ID.TEXTAREA:
+        case html.TAG_ID.SELECT: {
+            if (p.openElements.hasInSelectScope(html.TAG_ID.SELECT)) {
+                p.openElements.popUntilTagNamePopped(html.TAG_ID.SELECT);
                 p._resetInsertionMode();
-                if (token.tagID !== html$1.TAG_ID.SELECT) {
+                if (token.tagID !== html.TAG_ID.SELECT) {
                     p._processStartTag(token);
                 }
             }
             break;
         }
-        case html$1.TAG_ID.SCRIPT:
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.SCRIPT:
+        case html.TAG_ID.TEMPLATE: {
             startTagInHead(p, token);
             break;
         }
@@ -7784,31 +7784,31 @@ function startTagInSelect(p, token) {
 }
 function endTagInSelect(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.OPTGROUP: {
+        case html.TAG_ID.OPTGROUP: {
             if (p.openElements.stackTop > 0 &&
-                p.openElements.currentTagId === html$1.TAG_ID.OPTION &&
-                p.openElements.tagIDs[p.openElements.stackTop - 1] === html$1.TAG_ID.OPTGROUP) {
+                p.openElements.currentTagId === html.TAG_ID.OPTION &&
+                p.openElements.tagIDs[p.openElements.stackTop - 1] === html.TAG_ID.OPTGROUP) {
                 p.openElements.pop();
             }
-            if (p.openElements.currentTagId === html$1.TAG_ID.OPTGROUP) {
-                p.openElements.pop();
-            }
-            break;
-        }
-        case html$1.TAG_ID.OPTION: {
-            if (p.openElements.currentTagId === html$1.TAG_ID.OPTION) {
+            if (p.openElements.currentTagId === html.TAG_ID.OPTGROUP) {
                 p.openElements.pop();
             }
             break;
         }
-        case html$1.TAG_ID.SELECT: {
-            if (p.openElements.hasInSelectScope(html$1.TAG_ID.SELECT)) {
-                p.openElements.popUntilTagNamePopped(html$1.TAG_ID.SELECT);
+        case html.TAG_ID.OPTION: {
+            if (p.openElements.currentTagId === html.TAG_ID.OPTION) {
+                p.openElements.pop();
+            }
+            break;
+        }
+        case html.TAG_ID.SELECT: {
+            if (p.openElements.hasInSelectScope(html.TAG_ID.SELECT)) {
+                p.openElements.popUntilTagNamePopped(html.TAG_ID.SELECT);
                 p._resetInsertionMode();
             }
             break;
         }
-        case html$1.TAG_ID.TEMPLATE: {
+        case html.TAG_ID.TEMPLATE: {
             templateEndTagInHead(p, token);
             break;
         }
@@ -7819,15 +7819,15 @@ function endTagInSelect(p, token) {
 //------------------------------------------------------------------
 function startTagInSelectInTable(p, token) {
     const tn = token.tagID;
-    if (tn === html$1.TAG_ID.CAPTION ||
-        tn === html$1.TAG_ID.TABLE ||
-        tn === html$1.TAG_ID.TBODY ||
-        tn === html$1.TAG_ID.TFOOT ||
-        tn === html$1.TAG_ID.THEAD ||
-        tn === html$1.TAG_ID.TR ||
-        tn === html$1.TAG_ID.TD ||
-        tn === html$1.TAG_ID.TH) {
-        p.openElements.popUntilTagNamePopped(html$1.TAG_ID.SELECT);
+    if (tn === html.TAG_ID.CAPTION ||
+        tn === html.TAG_ID.TABLE ||
+        tn === html.TAG_ID.TBODY ||
+        tn === html.TAG_ID.TFOOT ||
+        tn === html.TAG_ID.THEAD ||
+        tn === html.TAG_ID.TR ||
+        tn === html.TAG_ID.TD ||
+        tn === html.TAG_ID.TH) {
+        p.openElements.popUntilTagNamePopped(html.TAG_ID.SELECT);
         p._resetInsertionMode();
         p._processStartTag(token);
     }
@@ -7837,16 +7837,16 @@ function startTagInSelectInTable(p, token) {
 }
 function endTagInSelectInTable(p, token) {
     const tn = token.tagID;
-    if (tn === html$1.TAG_ID.CAPTION ||
-        tn === html$1.TAG_ID.TABLE ||
-        tn === html$1.TAG_ID.TBODY ||
-        tn === html$1.TAG_ID.TFOOT ||
-        tn === html$1.TAG_ID.THEAD ||
-        tn === html$1.TAG_ID.TR ||
-        tn === html$1.TAG_ID.TD ||
-        tn === html$1.TAG_ID.TH) {
+    if (tn === html.TAG_ID.CAPTION ||
+        tn === html.TAG_ID.TABLE ||
+        tn === html.TAG_ID.TBODY ||
+        tn === html.TAG_ID.TFOOT ||
+        tn === html.TAG_ID.THEAD ||
+        tn === html.TAG_ID.TR ||
+        tn === html.TAG_ID.TD ||
+        tn === html.TAG_ID.TH) {
         if (p.openElements.hasInTableScope(tn)) {
-            p.openElements.popUntilTagNamePopped(html$1.TAG_ID.SELECT);
+            p.openElements.popUntilTagNamePopped(html.TAG_ID.SELECT);
             p._resetInsertionMode();
             p.onEndTag(token);
         }
@@ -7860,40 +7860,40 @@ function endTagInSelectInTable(p, token) {
 function startTagInTemplate(p, token) {
     switch (token.tagID) {
         // First, handle tags that can start without a mode change
-        case html$1.TAG_ID.BASE:
-        case html$1.TAG_ID.BASEFONT:
-        case html$1.TAG_ID.BGSOUND:
-        case html$1.TAG_ID.LINK:
-        case html$1.TAG_ID.META:
-        case html$1.TAG_ID.NOFRAMES:
-        case html$1.TAG_ID.SCRIPT:
-        case html$1.TAG_ID.STYLE:
-        case html$1.TAG_ID.TEMPLATE:
-        case html$1.TAG_ID.TITLE:
+        case html.TAG_ID.BASE:
+        case html.TAG_ID.BASEFONT:
+        case html.TAG_ID.BGSOUND:
+        case html.TAG_ID.LINK:
+        case html.TAG_ID.META:
+        case html.TAG_ID.NOFRAMES:
+        case html.TAG_ID.SCRIPT:
+        case html.TAG_ID.STYLE:
+        case html.TAG_ID.TEMPLATE:
+        case html.TAG_ID.TITLE:
             startTagInHead(p, token);
             break;
         // Re-process the token in the appropriate mode
-        case html$1.TAG_ID.CAPTION:
-        case html$1.TAG_ID.COLGROUP:
-        case html$1.TAG_ID.TBODY:
-        case html$1.TAG_ID.TFOOT:
-        case html$1.TAG_ID.THEAD:
+        case html.TAG_ID.CAPTION:
+        case html.TAG_ID.COLGROUP:
+        case html.TAG_ID.TBODY:
+        case html.TAG_ID.TFOOT:
+        case html.TAG_ID.THEAD:
             p.tmplInsertionModeStack[0] = InsertionMode.IN_TABLE;
             p.insertionMode = InsertionMode.IN_TABLE;
             startTagInTable(p, token);
             break;
-        case html$1.TAG_ID.COL:
+        case html.TAG_ID.COL:
             p.tmplInsertionModeStack[0] = InsertionMode.IN_COLUMN_GROUP;
             p.insertionMode = InsertionMode.IN_COLUMN_GROUP;
             startTagInColumnGroup(p, token);
             break;
-        case html$1.TAG_ID.TR:
+        case html.TAG_ID.TR:
             p.tmplInsertionModeStack[0] = InsertionMode.IN_TABLE_BODY;
             p.insertionMode = InsertionMode.IN_TABLE_BODY;
             startTagInTableBody(p, token);
             break;
-        case html$1.TAG_ID.TD:
-        case html$1.TAG_ID.TH:
+        case html.TAG_ID.TD:
+        case html.TAG_ID.TH:
             p.tmplInsertionModeStack[0] = InsertionMode.IN_ROW;
             p.insertionMode = InsertionMode.IN_ROW;
             startTagInRow(p, token);
@@ -7905,13 +7905,13 @@ function startTagInTemplate(p, token) {
     }
 }
 function endTagInTemplate(p, token) {
-    if (token.tagID === html$1.TAG_ID.TEMPLATE) {
+    if (token.tagID === html.TAG_ID.TEMPLATE) {
         templateEndTagInHead(p, token);
     }
 }
 function eofInTemplate(p, token) {
     if (p.openElements.tmplCount > 0) {
-        p.openElements.popUntilTagNamePopped(html$1.TAG_ID.TEMPLATE);
+        p.openElements.popUntilTagNamePopped(html.TAG_ID.TEMPLATE);
         p.activeFormattingElements.clearToLastMarker();
         p.tmplInsertionModeStack.shift();
         p._resetInsertionMode();
@@ -7924,7 +7924,7 @@ function eofInTemplate(p, token) {
 // The "after body" insertion mode
 //------------------------------------------------------------------
 function startTagAfterBody(p, token) {
-    if (token.tagID === html$1.TAG_ID.HTML) {
+    if (token.tagID === html.TAG_ID.HTML) {
         startTagInBody(p, token);
     }
     else {
@@ -7933,13 +7933,13 @@ function startTagAfterBody(p, token) {
 }
 function endTagAfterBody(p, token) {
     var _a;
-    if (token.tagID === html$1.TAG_ID.HTML) {
+    if (token.tagID === html.TAG_ID.HTML) {
         if (!p.fragmentContext) {
             p.insertionMode = InsertionMode.AFTER_AFTER_BODY;
         }
         //NOTE: <html> is never popped from the stack, so we need to updated
         //the end location explicitly.
-        if (p.options.sourceCodeLocationInfo && p.openElements.tagIDs[0] === html$1.TAG_ID.HTML) {
+        if (p.options.sourceCodeLocationInfo && p.openElements.tagIDs[0] === html.TAG_ID.HTML) {
             p._setEndLocation(p.openElements.items[0], token);
             // Update the body element, if it doesn't have an end tag
             const bodyElement = p.openElements.items[1];
@@ -7960,20 +7960,20 @@ function tokenAfterBody(p, token) {
 //------------------------------------------------------------------
 function startTagInFrameset(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.FRAMESET: {
-            p._insertElement(token, html$1.NS.HTML);
+        case html.TAG_ID.FRAMESET: {
+            p._insertElement(token, html.NS.HTML);
             break;
         }
-        case html$1.TAG_ID.FRAME: {
-            p._appendElement(token, html$1.NS.HTML);
+        case html.TAG_ID.FRAME: {
+            p._appendElement(token, html.NS.HTML);
             token.ackSelfClosing = true;
             break;
         }
-        case html$1.TAG_ID.NOFRAMES: {
+        case html.TAG_ID.NOFRAMES: {
             startTagInHead(p, token);
             break;
         }
@@ -7981,9 +7981,9 @@ function startTagInFrameset(p, token) {
     }
 }
 function endTagInFrameset(p, token) {
-    if (token.tagID === html$1.TAG_ID.FRAMESET && !p.openElements.isRootHtmlElementCurrent()) {
+    if (token.tagID === html.TAG_ID.FRAMESET && !p.openElements.isRootHtmlElementCurrent()) {
         p.openElements.pop();
-        if (!p.fragmentContext && p.openElements.currentTagId !== html$1.TAG_ID.FRAMESET) {
+        if (!p.fragmentContext && p.openElements.currentTagId !== html.TAG_ID.FRAMESET) {
             p.insertionMode = InsertionMode.AFTER_FRAMESET;
         }
     }
@@ -7992,11 +7992,11 @@ function endTagInFrameset(p, token) {
 //------------------------------------------------------------------
 function startTagAfterFrameset(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.NOFRAMES: {
+        case html.TAG_ID.NOFRAMES: {
             startTagInHead(p, token);
             break;
         }
@@ -8004,14 +8004,14 @@ function startTagAfterFrameset(p, token) {
     }
 }
 function endTagAfterFrameset(p, token) {
-    if (token.tagID === html$1.TAG_ID.HTML) {
+    if (token.tagID === html.TAG_ID.HTML) {
         p.insertionMode = InsertionMode.AFTER_AFTER_FRAMESET;
     }
 }
 // The "after after body" insertion mode
 //------------------------------------------------------------------
 function startTagAfterAfterBody(p, token) {
-    if (token.tagID === html$1.TAG_ID.HTML) {
+    if (token.tagID === html.TAG_ID.HTML) {
         startTagInBody(p, token);
     }
     else {
@@ -8026,11 +8026,11 @@ function tokenAfterAfterBody(p, token) {
 //------------------------------------------------------------------
 function startTagAfterAfterFrameset(p, token) {
     switch (token.tagID) {
-        case html$1.TAG_ID.HTML: {
+        case html.TAG_ID.HTML: {
             startTagInBody(p, token);
             break;
         }
-        case html$1.TAG_ID.NOFRAMES: {
+        case html.TAG_ID.NOFRAMES: {
             startTagInHead(p, token);
             break;
         }
@@ -8048,7 +8048,7 @@ function characterInForeignContent(p, token) {
     p.framesetOk = false;
 }
 function popUntilHtmlOrIntegrationPoint(p) {
-    while (p.treeAdapter.getNamespaceURI(p.openElements.current) !== html$1.NS.HTML &&
+    while (p.treeAdapter.getNamespaceURI(p.openElements.current) !== html.NS.HTML &&
         !p._isIntegrationPoint(p.openElements.currentTagId, p.openElements.current)) {
         p.openElements.pop();
     }
@@ -8061,10 +8061,10 @@ function startTagInForeignContent(p, token) {
     else {
         const current = p._getAdjustedCurrentElement();
         const currentNs = p.treeAdapter.getNamespaceURI(current);
-        if (currentNs === html$1.NS.MATHML) {
+        if (currentNs === html.NS.MATHML) {
             foreignContent$1.adjustTokenMathMLAttrs(token);
         }
-        else if (currentNs === html$1.NS.SVG) {
+        else if (currentNs === html.NS.SVG) {
             foreignContent$1.adjustTokenSVGTagName(token);
             foreignContent$1.adjustTokenSVGAttrs(token);
         }
@@ -8079,14 +8079,14 @@ function startTagInForeignContent(p, token) {
     }
 }
 function endTagInForeignContent(p, token) {
-    if (token.tagID === html$1.TAG_ID.P || token.tagID === html$1.TAG_ID.BR) {
+    if (token.tagID === html.TAG_ID.P || token.tagID === html.TAG_ID.BR) {
         popUntilHtmlOrIntegrationPoint(p);
         p._endTagOutsideForeignContent(token);
         return;
     }
     for (let i = p.openElements.stackTop; i > 0; i--) {
         const element = p.openElements.items[i];
-        if (p.treeAdapter.getNamespaceURI(element) === html$1.NS.HTML) {
+        if (p.treeAdapter.getNamespaceURI(element) === html.NS.HTML) {
             p._endTagOutsideForeignContent(token);
             break;
         }
@@ -8109,30 +8109,30 @@ exports.serializeOuter = exports.serialize = void 0;
 
 // Sets
 const VOID_ELEMENTS = new Set([
-    html$1.TAG_NAMES.AREA,
-    html$1.TAG_NAMES.BASE,
-    html$1.TAG_NAMES.BASEFONT,
-    html$1.TAG_NAMES.BGSOUND,
-    html$1.TAG_NAMES.BR,
-    html$1.TAG_NAMES.COL,
-    html$1.TAG_NAMES.EMBED,
-    html$1.TAG_NAMES.FRAME,
-    html$1.TAG_NAMES.HR,
-    html$1.TAG_NAMES.IMG,
-    html$1.TAG_NAMES.INPUT,
-    html$1.TAG_NAMES.KEYGEN,
-    html$1.TAG_NAMES.LINK,
-    html$1.TAG_NAMES.META,
-    html$1.TAG_NAMES.PARAM,
-    html$1.TAG_NAMES.SOURCE,
-    html$1.TAG_NAMES.TRACK,
-    html$1.TAG_NAMES.WBR,
+    html.TAG_NAMES.AREA,
+    html.TAG_NAMES.BASE,
+    html.TAG_NAMES.BASEFONT,
+    html.TAG_NAMES.BGSOUND,
+    html.TAG_NAMES.BR,
+    html.TAG_NAMES.COL,
+    html.TAG_NAMES.EMBED,
+    html.TAG_NAMES.FRAME,
+    html.TAG_NAMES.HR,
+    html.TAG_NAMES.IMG,
+    html.TAG_NAMES.INPUT,
+    html.TAG_NAMES.KEYGEN,
+    html.TAG_NAMES.LINK,
+    html.TAG_NAMES.META,
+    html.TAG_NAMES.PARAM,
+    html.TAG_NAMES.SOURCE,
+    html.TAG_NAMES.TRACK,
+    html.TAG_NAMES.WBR,
     "img",
     "import",
 ]);
 function isVoidElement(node, options) {
     return (options.treeAdapter.isElementNode(node) &&
-        options.treeAdapter.getNamespaceURI(node) === html$1.NS.HTML &&
+        options.treeAdapter.getNamespaceURI(node) === html.NS.HTML &&
         VOID_ELEMENTS.has(options.treeAdapter.getTagName(node)));
 }
 const defaultOpts = {
@@ -8199,20 +8199,20 @@ function serializeOuter(node, options) {
 exports.serializeOuter = serializeOuter;
 function serializeChildNodes(parentNode, options) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    let html = "";
+    let html$1 = "";
     // Get container of the child nodes
     const container = ((_b = (_a = options.treeAdapter) === null || _a === void 0 ? void 0 : _a.isElementNode) === null || _b === void 0 ? void 0 : _b.call(_a, parentNode)) &&
-        ((_d = (_c = options.treeAdapter) === null || _c === void 0 ? void 0 : _c.getTagName) === null || _d === void 0 ? void 0 : _d.call(_c, parentNode)) === html$1.TAG_NAMES.TEMPLATE &&
-        ((_f = (_e = options.treeAdapter) === null || _e === void 0 ? void 0 : _e.getNamespaceURI) === null || _f === void 0 ? void 0 : _f.call(_e, parentNode)) === html$1.NS.HTML
+        ((_d = (_c = options.treeAdapter) === null || _c === void 0 ? void 0 : _c.getTagName) === null || _d === void 0 ? void 0 : _d.call(_c, parentNode)) === html.TAG_NAMES.TEMPLATE &&
+        ((_f = (_e = options.treeAdapter) === null || _e === void 0 ? void 0 : _e.getNamespaceURI) === null || _f === void 0 ? void 0 : _f.call(_e, parentNode)) === html.NS.HTML
         ? (_h = (_g = options.treeAdapter) === null || _g === void 0 ? void 0 : _g.getTemplateContent) === null || _h === void 0 ? void 0 : _h.call(_g, parentNode)
         : parentNode;
     const childNodes = (_k = (_j = options.treeAdapter) === null || _j === void 0 ? void 0 : _j.getChildNodes) === null || _k === void 0 ? void 0 : _k.call(_j, container);
     if (childNodes) {
         for (const currentNode of childNodes) {
-            html += serializeNode(currentNode, options);
+            html$1 += serializeNode(currentNode, options);
         }
     }
-    return html;
+    return html$1;
 }
 function serializeNode(node, options) {
     if (options.treeAdapter.isElementNode(node)) {
@@ -8241,36 +8241,36 @@ function serializeElement(node, options) {
         : `${serializeChildNodes(node, options)}</${tn}>`}`;
 }
 function serializeAttributes(node, { treeAdapter }) {
-    let html = "";
+    let html$1 = "";
     for (const attr of treeAdapter.getAttrList(node)) {
-        html += " ";
+        html$1 += " ";
         if (!attr.namespace) {
-            html += attr.name;
+            html$1 += attr.name;
         }
         else
             switch (attr.namespace) {
-                case html$1.NS.XML: {
-                    html += `xml:${attr.name}`;
+                case html.NS.XML: {
+                    html$1 += `xml:${attr.name}`;
                     break;
                 }
-                case html$1.NS.XMLNS: {
+                case html.NS.XMLNS: {
                     if (attr.name !== "xmlns") {
-                        html += "xmlns:";
+                        html$1 += "xmlns:";
                     }
-                    html += attr.name;
+                    html$1 += attr.name;
                     break;
                 }
-                case html$1.NS.XLINK: {
-                    html += `xlink:${attr.name}`;
+                case html.NS.XLINK: {
+                    html$1 += `xlink:${attr.name}`;
                     break;
                 }
                 default: {
-                    html += `${attr.prefix}:${attr.name}`;
+                    html$1 += `${attr.prefix}:${attr.name}`;
                 }
             }
-        html += `="${attr.value}"`;
+        html$1 += `="${attr.value}"`;
     }
-    return html;
+    return html$1;
 }
 function serializeTextNode(node, options) {
     var _a, _b;
@@ -8326,7 +8326,7 @@ Object.defineProperty(exports, "serializeOuter", { enumerable: true, get: functi
 /** @internal */
 exports.foreignContent = __importStar(foreignContent);
 /** @internal */
-exports.html = __importStar(html$1);
+exports.html = __importStar(html);
 /** @internal */
 exports.Token = __importStar(token);
 /** @internal */
@@ -8369,42 +8369,41 @@ exports.parseFragment = parseFragment;
 
 });
 
-var weapp2aliapp = {
-    "scroll-view": "scroll-view",
-    map: "map",
-};
-
-var html = {
-    weapp2aliapp: weapp2aliapp,
-};
-
-var xml = {
-    "scroll-view": {
-        attrs: {
-            weapp: {
-                bounces: "trap-scroll",
-                bindscrolltoupper: "onScrollToUpper",
-                bindscrolltolower: "onScrollToLower",
-                bindscroll: "onScroll",
-                "bind:touchstart": "onTouchStart",
-                "catch:touchstart": "onTouchStart",
-            },
-        },
+var mappings = {
+    elements: {
+        "scroll-view": "scroll-view",
+        map: "map",
     },
-    map: {
-        attrs: {
-            weapp: {
-                "bind:markertap": "onMarkerTap",
-            },
+    elementAttrs: {
+        "scroll-view": {
+            bounces: "trap-scroll",
+            bindscrolltoupper: "onScrollToUpper",
+            bindscrolltolower: "onScrollToLower",
+            bindscroll: "onScroll",
+            "bind:touchstart": "onTouchStart",
+            "catch:touchstart": "onTouchStart",
+        },
+        map: {
+            "bind:markertap": "onMarkerTap",
         },
     },
 };
+
 function getTagMapping(tagName) {
-    return xml[tagName];
+    var _a, _b;
+    var platformTagName = (_a = mappings === null || mappings === void 0 ? void 0 : mappings.elements) === null || _a === void 0 ? void 0 : _a[tagName];
+    var attrs = (_b = mappings === null || mappings === void 0 ? void 0 : mappings.elementAttrs) === null || _b === void 0 ? void 0 : _b[platformTagName];
+    return attrs;
 }
 
 var sourcePath = "";
 var config = Object.create(null);
+function getConfigElementAttrs(tagName) {
+    var _a, _b, _c, _d;
+    var platformTagName = (_b = (_a = config === null || config === void 0 ? void 0 : config.elementMappings) === null || _a === void 0 ? void 0 : _a.elements) === null || _b === void 0 ? void 0 : _b[tagName];
+    var attrs = (_d = (_c = config === null || config === void 0 ? void 0 : config.elementMappings) === null || _c === void 0 ? void 0 : _c.elementAttrs) === null || _d === void 0 ? void 0 : _d[platformTagName];
+    return attrs;
+}
 function transform(xml) {
     var document = dist.parseFragment(xml);
     return dist.serialize(document, {
@@ -8458,15 +8457,14 @@ function map(childNodes) {
     childNodes === null || childNodes === void 0 ? void 0 : childNodes.forEach(function (item) {
         var _a, _b;
         var element = item;
-        var aliappTagName = html.weapp2aliapp[element.tagName];
-        var attrsMapping = (_b = (_a = getTagMapping(aliappTagName)) === null || _a === void 0 ? void 0 : _a.attrs) !== null && _b !== void 0 ? _b : Object.create(null);
+        var attrsMapping = (_b = (_a = getConfigElementAttrs(element.tagName)) !== null && _a !== void 0 ? _a : getTagMapping(element.tagName)) !== null && _b !== void 0 ? _b : Object.create(null);
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
-                var _a, _b, _c, _d, _e;
+                var _a, _b, _c, _d;
                 var name = attr.name;
-                var keyName = (_b = (_a = attrsMapping === null || attrsMapping === void 0 ? void 0 : attrsMapping.weapp) === null || _a === void 0 ? void 0 : _a[name]) !== null && _b !== void 0 ? _b : name;
+                var keyName = (_a = attrsMapping === null || attrsMapping === void 0 ? void 0 : attrsMapping[name]) !== null && _a !== void 0 ? _a : name;
                 if (!replaceMappings[name] &&
-                    (((_c = name === null || name === void 0 ? void 0 : name.startsWith) === null || _c === void 0 ? void 0 : _c.call(name, "bind:")) || ((_d = name === null || name === void 0 ? void 0 : name.startsWith) === null || _d === void 0 ? void 0 : _d.call(name, "catch:")))) {
+                    (((_b = name === null || name === void 0 ? void 0 : name.startsWith) === null || _b === void 0 ? void 0 : _b.call(name, "bind:")) || ((_c = name === null || name === void 0 ? void 0 : name.startsWith) === null || _c === void 0 ? void 0 : _c.call(name, "catch:")))) {
                     keyName = keyName.replace(/^(bind:)|^(catch:)/, "");
                 }
                 keyName =
@@ -8474,7 +8472,7 @@ function map(childNodes) {
                 attr.name = keyName;
                 if (element.nodeName === "image" &&
                     attr.name === "src" &&
-                    !((_e = attr.value) === null || _e === void 0 ? void 0 : _e.startsWith("{{")) &&
+                    !((_d = attr.value) === null || _d === void 0 ? void 0 : _d.startsWith("{{")) &&
                     config.useRootPath) {
                     attr.value =
                         "/" +

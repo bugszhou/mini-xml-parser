@@ -1,5 +1,3 @@
-declare const _default: {
-    "scroll-view": string;
-    map: string;
-};
-export default _default;
+import { IElementMappings } from "../../__interface__";
+declare const mappings: IElementMappings;
+export default mappings;
