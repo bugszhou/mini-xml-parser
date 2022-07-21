@@ -1,6 +1,6 @@
 {
   "name": "mini-xml-parser",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "小程序xml互换",
   "author": "yiri.zhou",
   "main": "dist/mini-xml-parser.min.js",
