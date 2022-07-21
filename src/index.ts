@@ -6,7 +6,7 @@ import {
   DocumentFragment,
   Element,
 } from "mini-program-xml-parser/dist/tree-adapters/default";
-import getTagMapping from "./html/aliapp/xml";
+import getTagMapping, { getTagName } from "./html/aliapp/xml";
 import { IElementMappings } from "./__interface__";
 
 interface IConfig {
@@ -37,10 +37,7 @@ export function transform(xml: string) {
       getTagName(element) {
         // 替换成平台的属性
         map([element]);
-        if (element.tagName === "wxs") {
-          return "import-sjs";
-        }
-        return element.tagName;
+        return getTagName(element.tagName);
       },
       getAttrList(element) {
         if (element.tagName === "wxs") {

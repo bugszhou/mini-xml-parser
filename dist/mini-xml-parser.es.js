@@ -8373,8 +8373,15 @@ var mappings = {
     elements: {
         "scroll-view": "scroll-view",
         map: "map",
+        picker: "picker",
+        input: "input",
+        textarea: "textarea",
+        wxs: "import-sjs",
     },
     elementAttrs: {
+        /**
+         * 属性为支付宝小程序标签名
+         */
         "scroll-view": {
             bounces: "trap-scroll",
             bindscrolltoupper: "onScrollToUpper",
@@ -8386,6 +8393,21 @@ var mappings = {
         map: {
             "bind:markertap": "onMarkerTap",
         },
+        picker: {
+            bindchange: "onChange",
+        },
+        input: {
+            bindblur: "onBlur",
+            bindinput: "onInput",
+            bindfocus: "onFocus",
+            bindconfirm: "onConfirm",
+        },
+        textarea: {
+            bindblur: "onBlur",
+            bindinput: "onInput",
+            bindfocus: "onFocus",
+            bindconfirm: "onConfirm",
+        },
     },
 };
 
@@ -8394,6 +8416,10 @@ function getTagMapping(tagName) {
     var platformTagName = (_a = mappings === null || mappings === void 0 ? void 0 : mappings.elements) === null || _a === void 0 ? void 0 : _a[tagName];
     var attrs = (_b = mappings === null || mappings === void 0 ? void 0 : mappings.elementAttrs) === null || _b === void 0 ? void 0 : _b[platformTagName];
     return attrs;
+}
+function getTagName(originalTagName) {
+    var _a;
+    return ((_a = mappings === null || mappings === void 0 ? void 0 : mappings.elements) === null || _a === void 0 ? void 0 : _a[originalTagName]) || originalTagName;
 }
 
 var sourcePath = "";
@@ -8411,10 +8437,7 @@ function transform(xml) {
             getTagName: function (element) {
                 // 替换成平台的属性
                 map([element]);
-                if (element.tagName === "wxs") {
-                    return "import-sjs";
-                }
-                return element.tagName;
+                return getTagName(element.tagName);
             },
             getAttrList: function (element) {
                 var _a, _b;
