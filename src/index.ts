@@ -77,6 +77,15 @@ export function transform(xml: string) {
   });
 }
 
+function isInternalResource(path: string) {
+  // 检查路径是否是网络资源、本地文件或Base64编码的资源
+  const isExternal = /^(https?:\/\/|wxfile:\/\/|data:image\/\w+;base64,)/i.test(path);
+  // 检查路径是否是内部变量模板
+  const isVariableTemplate = /^\{\{.*\}\}$/.test(path);
+  // 如果不是上述类型，我们认为它是小程序包内资源
+  return !isExternal && !isVariableTemplate;
+}
+
 function map(childNodes: DocumentFragment["childNodes"]) {
   childNodes?.forEach((item) => {
     const element = item as unknown as Element;
@@ -108,7 +117,7 @@ function map(childNodes: DocumentFragment["childNodes"]) {
           element.nodeName === "image" &&
           attr.name === "src" &&
           !attr.value?.startsWith("/") &&
-          !attr.value?.startsWith("{{") &&
+          isInternalResource(attr.value) &&
           config.useRootPath
         ) {
           attr.value =
