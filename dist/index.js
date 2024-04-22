@@ -98,6 +98,14 @@ function transform(xml) {
     });
 }
 exports.transform = transform;
+function isInternalResource(path) {
+    // 检查路径是否是网络资源、本地文件或Base64编码的资源
+    var isExternal = /^(https?:\/\/|wxfile:\/\/|data:image\/\w+;base64,)/i.test(path);
+    // 检查路径是否是内部变量模板
+    var isVariableTemplate = /^\{\{.*\}\}$/.test(path);
+    // 如果不是上述类型，我们认为它是小程序包内资源
+    return !isExternal && !isVariableTemplate;
+}
 function map(childNodes) {
     childNodes === null || childNodes === void 0 ? void 0 : childNodes.forEach(function (item) {
         var _a, _b;
@@ -105,7 +113,7 @@ function map(childNodes) {
         var attrsMapping = (_b = (_a = getConfigElementAttrs(element.tagName)) !== null && _a !== void 0 ? _a : (0, xml_1.default)(element.tagName)) !== null && _b !== void 0 ? _b : Object.create(null);
         if (element === null || element === void 0 ? void 0 : element.attrs) {
             element.attrs.forEach(function (attr) {
-                var _a, _b, _c, _d, _e;
+                var _a, _b, _c, _d;
                 var name = attr.name;
                 var keyName = (_a = attrsMapping === null || attrsMapping === void 0 ? void 0 : attrsMapping[name]) !== null && _a !== void 0 ? _a : name;
                 if (!replaceMappings_1.default[name] &&
@@ -118,7 +126,7 @@ function map(childNodes) {
                 if (element.nodeName === "image" &&
                     attr.name === "src" &&
                     !((_d = attr.value) === null || _d === void 0 ? void 0 : _d.startsWith("/")) &&
-                    !((_e = attr.value) === null || _e === void 0 ? void 0 : _e.startsWith("{{")) &&
+                    isInternalResource(attr.value) &&
                     config.useRootPath) {
                     attr.value =
                         "/" +
